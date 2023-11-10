@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { path } from "../stores";
+
 	let username: string;
 	let password: string;
 	let name: string;
@@ -6,7 +8,7 @@
 	let year: number;
 
 	async function createUser() {
-		await fetch(`/api/user/${username}`, {
+		let res = await fetch(`/api/user`, {
 			method: "POST",
 			headers: {
 				"content-type": "application/json",
@@ -19,10 +21,15 @@
 				year,
 			}),
 		});
+
+		let json = await res.json();
+		if (json.success) {
+			$path = "/login";
+		}
 	}
 </script>
 
-<form on:submit={createUser}>
+<form on:submit|preventDefault={createUser}>
 	<div>
 		<label for="username">Username: </label>
 		<input type="text" required bind:value={username} id="username" />
@@ -43,4 +50,5 @@
 		<label for="year">Year: </label>
 		<input type="number" bind:value={year} id="year" />
 	</div>
+	<input type="submit" value="Sign up" />
 </form>

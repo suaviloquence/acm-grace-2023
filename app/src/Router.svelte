@@ -2,6 +2,7 @@
 	import type { SvelteComponent } from "svelte";
 	import { path } from "./stores";
 	import Signup from "./pages/Signup.svelte";
+	import Login from "./pages/Login.svelte";
 
 	/// e.g., set to /app so /home corresponds to example.com/app/home
 	const PREFIX = "";
@@ -17,6 +18,7 @@
 
 	const routes: Record<string, Component<any> | Options<any>> = {
 		"/signup": Signup,
+		"/login": Login,
 	};
 
 	function isOptions<P, MG = P>(

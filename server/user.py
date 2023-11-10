@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from db import DB
+from db import get_db
 
 @dataclass
 class UsersSlay(object):
@@ -13,52 +13,57 @@ class UsersSlay(object):
 	job: str = "Student at UCSC"
 	
 	@staticmethod
-	def get(db: DB, username: str):
-		cur = db.con.cursor()
-		cur.execute("SELECT * FROM users WHERE username = ?", username)
-		res = cur.fetchone()
-		if res is None:
-			return None
+	def get(username: str):
+		with get_db() as con:
+			cur = con.cursor()
+			cur.execute("SELECT * FROM users WHERE username = ?", [username])
+			res = cur.fetchone()
+			if res is not None:
+				return UsersSlay(*res, associations=None)
+		return None
 		
-		return UsersSlay(res['username'], res['password'], res['name'], res['age'], res['year'], res['pfp'], None)
 	
-	def get_pfp(self, db: DB):
+	def get_pfp(self):
 		cur = db.con.cursor()
-		cur.execute("SELECT * FROM pfps WHERE id = ?", self.pfp_id)
+		cur.execute("SELECT * FROM pfps WHERE id = ?", [self.pfp_id])
 		res = cur.fetchone()
 		if res is None: return None
 		return res['data']
 	
 
-	def create(self, db: DB):
-		cur = db.con.cursor()
-		cur.execute("INSERT INTO users (username, password, name, pfp, age, year) VALUES (?, ?, ?, ?, ?)", self.username, self.password, self.pfp_id, self.age, self.year)
+	def create(self):
+		with get_db() as con:
+			con.execute("INSERT INTO users (username, password, name, pfp, age, year) VALUES (?, ?, ?, ?, ?, ?)", (self.username, self.password, self.name, self.pfp_id, self.age, self.year))
 	
 	@staticmethod
-	def create_pfp(db: DB, pfp: bytes):
+	def create_pfp(pfp: bytes):
 		cur = db.con.cursor()
-		cur.execute("INSERT INTO pfps (data) VALUES (?) RETURNING id", pfp)
+		cur.execute("INSERT INTO pfps (data) VALUES (?) RETURNING id", (pfp))
 		res = cur.fetchone()
 		if res is None:
 			return 0
 		return res['id']
 	
-	def update(self, db: DB):
+	def update(self):
 		cur = db.con.cursor()
 		cur.execute("UPDATE users SET password = ?, name = ?, pfp = ?, age = ?, year = ? WHERE username = ?",
-					self.password, self.name, self.pfp, self.age, self.year)
+					(self.password, self.name, self.pfp, self.age, self.year, self.username))
+		cur.commit()
 		
 	@staticmethod
-	def update_pfp(db: DB, pfp_id: int, pfp: bytes):
+	def update_pfp(pfp_id: int, pfp: bytes):
 		cur = db.con.cursor()
-		cur.execute("UPDATE pfps SET data = ? WHERE id = ?", pfp, pfp_id)
+		cur.execute("UPDATE pfps SET data = ? WHERE id = ?", (pfp, pfp_id))
+		cur.commit()
 	
-	def delete(self, db: DB):
+	def delete(self):
 		cur = db.con.cursor()
-		cur.execute("DELETE FROM users WHERE username = ?", self.username)
+		cur.execute("DELETE FROM users WHERE username = ?", (self.username))
+		cur.commit()
 	
 	@staticmethod
-	def delete(db: DB, pfp_id: int):
+	def delete(pfp_id: int):
 		cur = db.con.cursor()
-		cur.execute("DELETE FROM pfps WHERE id = ?", pfp_id)
+		cur.execute("DELETE FROM pfps WHERE id = ?", (pfp_id))
+		cur.commit()
 
