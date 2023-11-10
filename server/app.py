@@ -14,9 +14,12 @@ class UsersSlay(object):
     username: str
     password: str
     name: str
+    pronouns: str
+    grad_year: int
     age: int
     associations: str
     job: str = "Student at UCSC"
+
 
 
 @app.route("/api/user/<username>")
