@@ -2,31 +2,19 @@
 
 from flask import Flask
 from dataclasses import dataclass
+from db import DB
+from user import UsersSlay
+
 
 app = Flask(__name__)
 
-users = {
-    "lavilia": "Manuel"
-}
-
-@dataclass
-class UsersSlay(object):
-    username: str
-    password: str
-    name: str
-    age: int
-    associations: str
-    job: str = "Student at UCSC"
-
+db = DB()
 
 @app.route("/api/user/<username>")
 def get_user(username):
     """ get the user from the database """
-    username = username.lower()
-    if username not in users:
-        return "Error user not found"
-
-    return users[username]
+    UsersSlay.get(db, username)
+    
 
 
 @app.route("/")
