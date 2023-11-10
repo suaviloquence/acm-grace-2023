@@ -1,14 +1,14 @@
 CREATE TABLE events (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     eventName TEXT NOT NULL,
-    owner TEXT NOT NULL,
+    owner TEXT NOT NULL REFERENCES users(username) ON DELETE CASCADE,
     date INT NOT NULL,
     location_lat REAL NOT NULL,
-    location_lon REAL NOT NULL,
+    location_lon REAL NOT NULL
 );
 
 CREATE TABLE eventCollab (
-    events INTEGER NOT NULL REFERENCES events(id),
-    name TEXT NOT NULL REFERENCES users(username)
+    events INTEGER NOT NULL REFERENCES events(id) ON DELETE CASCADE,
+    name TEXT NOT NULL REFERENCES users(username) ON DELETE CASCADE
 
 );

@@ -5,6 +5,7 @@
 	let username: string;
 	let password: string;
 	let name: string;
+	let pronouns: string;
 	let age: number;
 	let year: number;
 
@@ -22,6 +23,7 @@
 				username,
 				password,
 				name,
+				pronouns,
 				age,
 				year,
 			}),
@@ -46,6 +48,10 @@
 	<div>
 		<label for="name">Name: </label>
 		<input type="text" required bind:value={name} id="name" />
+	</div>
+	<div>
+		<label for="pronouns">Pronouns: </label>
+		<input type="text" required bind:value={pronouns} id="pronouns" />
 	</div>
 	<div>
 		<label for="age">Age: </label>

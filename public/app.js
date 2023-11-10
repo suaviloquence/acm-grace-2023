@@ -881,8 +881,13 @@
 		let t13;
 		let input4;
 		let t14;
+		let div5;
+		let label5;
+		let t16;
 		let input5;
-		let t15;
+		let t17;
+		let input6;
+		let t18;
 		let button;
 		let mounted;
 		let dispose;
@@ -910,18 +915,24 @@
 				t8 = space();
 				div3 = element("div");
 				label3 = element("label");
-				label3.textContent = "Age:";
+				label3.textContent = "Pronouns:";
 				t10 = space();
 				input3 = element("input");
 				t11 = space();
 				div4 = element("div");
 				label4 = element("label");
-				label4.textContent = "Year:";
+				label4.textContent = "Age:";
 				t13 = space();
 				input4 = element("input");
 				t14 = space();
+				div5 = element("div");
+				label5 = element("label");
+				label5.textContent = "Year:";
+				t16 = space();
 				input5 = element("input");
-				t15 = space();
+				t17 = space();
+				input6 = element("input");
+				t18 = space();
 				button = element("button");
 				button.textContent = "or log in";
 				attr(label0, "for", "username");
@@ -936,14 +947,18 @@
 				attr(input2, "type", "text");
 				input2.required = true;
 				attr(input2, "id", "name");
-				attr(label3, "for", "age");
-				attr(input3, "type", "number");
-				attr(input3, "id", "age");
-				attr(label4, "for", "year");
+				attr(label3, "for", "pronouns");
+				attr(input3, "type", "text");
+				input3.required = true;
+				attr(input3, "id", "pronouns");
+				attr(label4, "for", "age");
 				attr(input4, "type", "number");
-				attr(input4, "id", "year");
-				attr(input5, "type", "submit");
-				input5.value = "Sign up";
+				attr(input4, "id", "age");
+				attr(label5, "for", "year");
+				attr(input5, "type", "number");
+				attr(input5, "id", "year");
+				attr(input6, "type", "submit");
+				input6.value = "Sign up";
 			},
 			m(target, anchor) {
 				insert(target, form, anchor);
@@ -969,27 +984,34 @@
 				append(div3, label3);
 				append(div3, t10);
 				append(div3, input3);
-				set_input_value(input3, /*age*/ ctx[3]);
+				set_input_value(input3, /*pronouns*/ ctx[3]);
 				append(form, t11);
 				append(form, div4);
 				append(div4, label4);
 				append(div4, t13);
 				append(div4, input4);
-				set_input_value(input4, /*year*/ ctx[4]);
+				set_input_value(input4, /*age*/ ctx[4]);
 				append(form, t14);
-				append(form, input5);
-				append(form, t15);
+				append(form, div5);
+				append(div5, label5);
+				append(div5, t16);
+				append(div5, input5);
+				set_input_value(input5, /*year*/ ctx[5]);
+				append(form, t17);
+				append(form, input6);
+				append(form, t18);
 				append(form, button);
 
 				if (!mounted) {
 					dispose = [
-						listen(input0, "input", /*input0_input_handler*/ ctx[7]),
-						listen(input1, "input", /*input1_input_handler*/ ctx[8]),
-						listen(input2, "input", /*input2_input_handler*/ ctx[9]),
-						listen(input3, "input", /*input3_input_handler*/ ctx[10]),
-						listen(input4, "input", /*input4_input_handler*/ ctx[11]),
-						listen(button, "click", /*click_handler*/ ctx[12]),
-						listen(form, "submit", prevent_default(/*createUser*/ ctx[6]))
+						listen(input0, "input", /*input0_input_handler*/ ctx[8]),
+						listen(input1, "input", /*input1_input_handler*/ ctx[9]),
+						listen(input2, "input", /*input2_input_handler*/ ctx[10]),
+						listen(input3, "input", /*input3_input_handler*/ ctx[11]),
+						listen(input4, "input", /*input4_input_handler*/ ctx[12]),
+						listen(input5, "input", /*input5_input_handler*/ ctx[13]),
+						listen(button, "click", /*click_handler*/ ctx[14]),
+						listen(form, "submit", prevent_default(/*createUser*/ ctx[7]))
 					];
 
 					mounted = true;
@@ -1008,12 +1030,16 @@
 					set_input_value(input2, /*name*/ ctx[2]);
 				}
 
-				if (dirty & /*age*/ 8 && to_number(input3.value) !== /*age*/ ctx[3]) {
-					set_input_value(input3, /*age*/ ctx[3]);
+				if (dirty & /*pronouns*/ 8 && input3.value !== /*pronouns*/ ctx[3]) {
+					set_input_value(input3, /*pronouns*/ ctx[3]);
 				}
 
-				if (dirty & /*year*/ 16 && to_number(input4.value) !== /*year*/ ctx[4]) {
-					set_input_value(input4, /*year*/ ctx[4]);
+				if (dirty & /*age*/ 16 && to_number(input4.value) !== /*age*/ ctx[4]) {
+					set_input_value(input4, /*age*/ ctx[4]);
+				}
+
+				if (dirty & /*year*/ 32 && to_number(input5.value) !== /*year*/ ctx[5]) {
+					set_input_value(input5, /*year*/ ctx[5]);
 				}
 			},
 			i: noop,
@@ -1031,10 +1057,11 @@
 
 	function instance$4($$self, $$props, $$invalidate) {
 		let $path;
-		component_subscribe($$self, path, $$value => $$invalidate(5, $path = $$value));
+		component_subscribe($$self, path, $$value => $$invalidate(6, $path = $$value));
 		let username;
 		let password;
 		let name;
+		let pronouns;
 		let age;
 		let year;
 
@@ -1046,7 +1073,14 @@
 			let res = await fetch(`/api/user`, {
 				method: "POST",
 				headers: { "content-type": "application/json" },
-				body: JSON.stringify({ username, password, name, age, year })
+				body: JSON.stringify({
+					username,
+					password,
+					name,
+					pronouns,
+					age,
+					year
+				})
 			});
 
 			let json = await res.json();
@@ -1072,13 +1106,18 @@
 		}
 
 		function input3_input_handler() {
-			age = to_number(this.value);
-			$$invalidate(3, age);
+			pronouns = this.value;
+			$$invalidate(3, pronouns);
 		}
 
 		function input4_input_handler() {
+			age = to_number(this.value);
+			$$invalidate(4, age);
+		}
+
+		function input5_input_handler() {
 			year = to_number(this.value);
-			$$invalidate(4, year);
+			$$invalidate(5, year);
 		}
 
 		const click_handler = () => set_store_value(path, $path = "/login", $path);
@@ -1087,6 +1126,7 @@
 			username,
 			password,
 			name,
+			pronouns,
 			age,
 			year,
 			$path,
@@ -1096,6 +1136,7 @@
 			input2_input_handler,
 			input3_input_handler,
 			input4_input_handler,
+			input5_input_handler,
 			click_handler
 		];
 	}
@@ -1277,19 +1318,64 @@
 	// (21:0) {:then info}
 	function create_then_block(ctx) {
 		let h2;
+		let t0;
+		let t1_value = /*info*/ ctx[4].name + "";
+		let t1;
+		let t2;
+		let if_block = /*info*/ ctx[4].pronouns && create_if_block(ctx);
 
 		return {
 			c() {
 				h2 = element("h2");
-				h2.textContent = `Hello, ${/*info*/ ctx[4].name}`;
+				t0 = text("Hello, ");
+				t1 = text(t1_value);
+				t2 = space();
+				if (if_block) if_block.c();
 			},
 			m(target, anchor) {
 				insert(target, h2, anchor);
+				append(h2, t0);
+				append(h2, t1);
+				append(h2, t2);
+				if (if_block) if_block.m(h2, null);
+			},
+			p(ctx, dirty) {
+				if (/*info*/ ctx[4].pronouns) if_block.p(ctx, dirty);
+			},
+			d(detaching) {
+				if (detaching) {
+					detach(h2);
+				}
+
+				if (if_block) if_block.d();
+			}
+		};
+	}
+
+	// (24:2) {#if info.pronouns}
+	function create_if_block(ctx) {
+		let t0;
+		let t1_value = /*info*/ ctx[4].pronouns + "";
+		let t1;
+		let t2;
+
+		return {
+			c() {
+				t0 = text("(");
+				t1 = text(t1_value);
+				t2 = text(")");
+			},
+			m(target, anchor) {
+				insert(target, t0, anchor);
+				insert(target, t1, anchor);
+				insert(target, t2, anchor);
 			},
 			p: noop,
 			d(detaching) {
 				if (detaching) {
-					detach(h2);
+					detach(t0);
+					detach(t1);
+					detach(t2);
 				}
 			}
 		};

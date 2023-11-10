@@ -29,6 +29,7 @@ def get_user(username):
         return json.dumps({
             'username': user.username,
             'name': user.name,
+            'pronouns': user.pronouns,
             'age': user.age,
             'year': user.year,
         })
@@ -59,14 +60,25 @@ def create_user():
     if 'name' not in data:
         return error("name is required")
     name = data['name']
-    if data['age'] >=100 or data['age'] <= 0:
-        return error("This is not a real age")
-    age = data['age']
-    if data['year'] > 2040 or data['year'] < 2022:
-        return error("This is not a valid graduation year")
-    year = data['year']
+    
+    pronouns = None
+    if 'pronouns' in data:
+        pronouns = data['pronouns']
 
-    user = UsersSlay(username, hashed, name, age, year, 0, None)
+    age = None
+    
+    if 'age' in data:
+        age = data['age']
+        if data['age'] >=100 or data['age'] <= 0:
+            return error("This is not a real age")
+    
+    year = None
+    if 'year' in data:
+        if data['year'] > 2040 or data['year'] < 2022:
+            return error("This is not a valid graduation year")
+        year = data['year']
+
+    user = UsersSlay(username, hashed, name, pronouns, age, year, 0, None)
     
     user.create()
     

@@ -23,5 +23,10 @@
 {#await info_pms}
 	Loading user info...
 {:then info}
-	<h2>Hello, {info.name}</h2>
+	<h2>
+		Hello, {info.name}
+		{#if info.pronouns}
+			({info.pronouns})
+		{/if}
+	</h2>
 {/await}

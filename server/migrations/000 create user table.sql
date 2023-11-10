@@ -7,7 +7,8 @@ CREATE TABLE users (
 	username TEXT NOT NULL PRIMARY KEY,
 	password BLOB NOT NULL,
 	name TEXT NOT NULL,
-	pfp INTEGER NOT NULL REFERENCES pfps(id) DEFAULT 0,
+	pronouns TEXT,
 	age INTEGER,
-	year INTEGER
+	year INTEGER,
+	pfp INTEGER NOT NULL REFERENCES pfps(id) DEFAULT 0
 );
