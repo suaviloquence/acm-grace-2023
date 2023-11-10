@@ -10,16 +10,16 @@ class Events(object):
     location = tuple
 
     # group chat and photo need to be implemented later
-	
-	@static_method
-	def get_by_user(username: str):
-		l = []
+    
+    @static_method
+    def get_by_user(username: str):
+        l = []
         with get_db() as con:
             cur = con.cursor()
             cur.execute("SELECT * FROM events WHERE owner = ?", [username])
             rows = cur.fetchall()
-			for res in rows:
-				l.append(Events(res[0], res[1], res[2], (res[3], res[4])))
+            for res in rows:
+                l.append(Events(res[0], res[1], res[2], (res[3], res[4])))
         return l
 
     @staticmethod
