@@ -1,8 +1,13 @@
 <script lang="ts">
 	import { path } from "../stores";
+	import { getUsernameCookie } from "../util";
 
 	let username: string;
 	let password: string;
+
+	if (getUsernameCookie()) {
+		$path = "/dashboard";
+	}
 
 	async function login() {
 		let res = await fetch("/api/login", {
@@ -16,8 +21,8 @@
 			alert("Error: " + json["error"]);
 			return;
 		}
-		if ("success" in json) {
-			document.cookie = `username=${username.toLowerCase()}`;
+		if ("username" in json) {
+			localStorage.setItem("username", json["username"]);
 			$path = "/dashboard";
 		}
 	}
@@ -33,4 +38,5 @@
 		<input type="password" required bind:value={password} id="password" />
 	</div>
 	<input type="submit" value="Log in" />
+	<button on:click={() => ($path = "/signup")}>or sign up</button>
 </form>

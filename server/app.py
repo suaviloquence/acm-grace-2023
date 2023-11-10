@@ -26,7 +26,12 @@ def get_user(username):
     """ get the user from the database """
     user = UsersSlay.get(username)
     if user is not None:
-        return json.dumps(user)
+        return json.dumps({
+            'username': user.username,
+            'name': user.name,
+            'age': user.age,
+            'year': user.year,
+        })
     else:
         return error("user not found")
     
@@ -64,14 +69,13 @@ def create_user():
     user = UsersSlay(username, hashed, name, age, year, 0, None)
     
     user.create()
-    print(UsersSlay.get(username))
     
     return json.dumps({"success": True})
 
 @app.route("/api/login", methods=['POST'])
 def login():
     if 'username' in session:
-        return get_self()
+        return get_me()
     if not request.is_json:
         return error('invalid req')
     data = request.json
@@ -88,7 +92,14 @@ def login():
         return error('invalid pw')
 
     session['username'] = username
-    return json.dumps({"success":  True})
+    return get_me()
+    
+
+@app.route('/api/logout')
+def logout():
+    if 'username' in session:
+        del session['username']
+    return json.dumps({"success": True})
     
 
 

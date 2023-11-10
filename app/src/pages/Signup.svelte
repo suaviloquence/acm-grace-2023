@@ -1,11 +1,16 @@
 <script lang="ts">
 	import { path } from "../stores";
+	import { getUsernameCookie } from "../util";
 
 	let username: string;
 	let password: string;
 	let name: string;
 	let age: number;
 	let year: number;
+
+	if (getUsernameCookie()) {
+		$path = "/dashboard";
+	}
 
 	async function createUser() {
 		let res = await fetch(`/api/user`, {
@@ -51,4 +56,5 @@
 		<input type="number" bind:value={year} id="year" />
 	</div>
 	<input type="submit" value="Sign up" />
+	<button on:click={() => ($path = "/login")}>or log in</button>
 </form>
