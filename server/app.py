@@ -19,8 +19,8 @@ def error(message):
 def get_user(username):
     """ get the user from the database """
     user = UsersSlay.get(db, username)
-    if user != None:
-        return(json.dumps(user))
+    if user is not None:
+        return json.dumps(user)
     else:
         return error("user not found")
     
