@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from db import DB
+from db import get_db
 
 @dataclass
 class Events(object):
@@ -12,25 +12,25 @@ class Events(object):
     # group chat and photo need to be implemented later
 
     @staticmethod
-    def get(self, db: DB, eventName: str):
-        cur = db.con.cursor()
-        cur.execute("SELECT * FROM events WHERE eventName = ?", eventName)
-        res = cur.fetchone()
-        if res is None:
-            return None
+    def get(eventName: str):
+        with get_db() as con:
+            cur = con.cursor()
+            cur.execute("SELECT * FROM events WHERE eventName = ?", [eventName])
+            res = cur.fetchone()
+            if res is not None:
+                return Events(*res)
+        return None
 
-        return Events(res['eventName'], res['eventCollab'], res['date'], res['location'])
+    def create(self):
+        with get_db() as con:
+            con.execute("INSERT INTO events (eventName, eventCollab, date, location) VALUES (?, ?, ?, ?)",
+                        (self.eventName, self.eventCollab, self.date, self.location))
 
-    def create(self, db: DB):
-        cur = db.con.cursor()
-        cur.execute("INSERT INTO events (eventName, eventCollab, date, location) VALUES (?, ?, ?, ?)",
-                    self.eventName, self.eventCollab, self.date, self.location)
+    def update(self):
+        with get_db() as con:
+            con.execute("UPDATE events SET eventName = ?, eventCollab = ?, date = ?, location = ?",
+                    (self.eventName, self.eventCollab, self.date, self.location))
 
-    def update(self, db: DB):
-        cur = db.con.cursor()
-        cur.execute("UPDATE events SET eventName = ?, eventCollab = ?, date = ?, location = ?",
-                    self.eventName, self.eventCollab, self.date, self.location)
-
-    def delete(self, db: DB):
-        cur = db.con.cursor()
-        cur.execute("DELETE FROM events WHERE eventName = ?", self.eventName)
+    def delete(self):
+        with get_db() as con:
+            con.execute("DELETE FROM events WHERE eventName = ?", (self.eventName))
