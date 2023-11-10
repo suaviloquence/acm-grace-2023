@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import json
 
 from flask import Flask
 from dataclasses import dataclass
@@ -13,8 +14,11 @@ db = DB()
 @app.route("/api/user/<username>")
 def get_user(username):
     """ get the user from the database """
-    UsersSlay.get(db, username)
-    
+    user = UsersSlay.get(db, username)
+    if user != None:
+        return(json.dumps(user))
+    else:
+        return "ERROR!!!!!!!!!!!!!!1"
 
 
 @app.route("/")
