@@ -11,14 +11,16 @@ class Events(object):
 
     # group chat and photo need to be implemented later
 
-    def get(db: DB, username: str):
+    @staticmethod
+    def get(self, db: DB, eventName: str):
         cur = db.con.cursor()
         cur.execute("SELECT * FROM events WHERE eventName = ?", eventName)
         res = cur.fetchone()
         if res is None:
             return None
 
-        return Events(res['eventName'], res['eventCollab'], res['date'], res['location'], None)
+        return Events(res['eventName'], res['eventCollab'], res['date'], res['location'])
+
     def create(self, db: DB):
         cur = db.con.cursor()
         cur.execute("INSERT INTO events (eventName, eventCollab, date, location) VALUES (?, ?, ?, ?)",
