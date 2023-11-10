@@ -3,7 +3,8 @@ CREATE TABLE events (
     eventName TEXT NOT NULL,
     owner TEXT NOT NULL,
     date INT NOT NULL,
-    location REAL_LAT REAL_LONG NOT NULL
+    location_lat REAL NOT NULL,
+    location_lon REAL NOT NULL,
 );
 
 CREATE TABLE eventCollab (
