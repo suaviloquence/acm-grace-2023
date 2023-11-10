@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 
 @dataclass
 class Events(object):
@@ -7,5 +8,6 @@ class Events(object):
     date = int
     location = tuple
 
-    # group chat and photo
-
+    # group chat and photo need to be implemented later
+    def get_event(self):
+        pass
