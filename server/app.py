@@ -5,9 +5,10 @@ from flask import Flask, request
 from dataclasses import dataclass
 from db import DB
 from user import UsersSlay
+import os.path
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder=os.path.abspath("../public"))
 
 db = DB()
 
@@ -53,8 +54,12 @@ def create_user(username):
     user.create()
 
 
-@app.route("/")
-def serve_index():
-    return """
-    <p>:3</p>
-    """
+@app.route("/public/<path:path>", methods=['GET'])
+def serve_public(path):
+    return send_from_directory('../public', path)
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve_page(path):
+    return app.send_static_file("index.html")
+
