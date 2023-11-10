@@ -29,12 +29,26 @@ def create_user(username):
     # make sure is none, otherwise return error
 
     if not request.is_json():
-        # return ererr invalid request
-        return ...
+        # return error invalid request
+        error("This user already exists")
     
     data = request.json
-    data['username']
-    user = UsersSlay(...) # TODO
+    if data['username'] in db:
+        return error("This username is already in use")
+    else:
+        username = data['username']
+    password = data['password']
+    name = data['name']
+    if data['age'] >=100 or data['age'] <= 0:
+        return error("This is not a real age")
+    else:
+        age = data['age']
+    if data['year'] > 2040 or data['year'] < 2022:
+        return error("This is not a valid graduation year")
+    else:
+        year = data['year']
+
+    user = UsersSlay(username, password, name, age, year)  # TODO
     
     user.create()
 
