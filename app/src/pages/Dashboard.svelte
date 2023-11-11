@@ -72,29 +72,35 @@
 		end = buffer;
 	}
 
-	fetch(`/api/users/me/events`)
+	fetch(`/api/user/me/events`)
 		.then((res) => res.json())
 		.then((evt) => {
 			events = evt;
 		});
 
+	$: console.dir(events);
 	$: if (events) {
+		for (const week of weeks) {
+			for (const day of week) {
+				day.events = [];
+			}
+		}
 		for (const evt of events) {
-			if (evt.date <= start.getTime() || evt.date >= end.getTime())
+			if (evt.start <= start.getTime() || evt.start >= end.getTime())
 				continue;
-			const date = new Date(evt.date);
 
 			for (const week of weeks) {
 				for (const day of week) {
 					if (
-						evt.date >= day.date.getTime() &&
-						evt.date < day.date.getTime() + 86400 * 1000
+						evt.start >= day.date.getTime() &&
+						evt.start < day.date.getTime() + 86400 * 1000
 					) {
-						day.events.push(evt);
+						day.events = [...day.events, evt];
 					}
 				}
 			}
 		}
+		weeks = weeks;
 	}
 
 	function select(day: CalendarDate) {
@@ -108,7 +114,7 @@
 	let end_time = "";
 
 	async function addEvent() {
-		let res = await fetch(`/api/user/me/events`, {
+		let res = await fetch(`/api/event`, {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({
@@ -128,6 +134,14 @@
 		let evt = await res.json();
 		events = [...events, evt];
 		showPopup = false;
+	}
+
+	async function deleteEvent(evt: Event) {
+		if (!confirm("Are you sure you want to delete this event?")) return;
+		await fetch(`/api/event/${evt.id}`, {
+			method: "DELETE",
+		});
+		events = events.filter((e) => e != evt);
 	}
 
 	$: updateCalendar(selected);
@@ -185,8 +199,43 @@
 								{#if day.month}{day.month} {/if}
 								{day.day}
 							</button>
-						</h4></td
-					>
+						</h4>
+						<ul>
+							{#each day.events as evt}
+								<li>
+									<h5>{evt.eventName} ({evt.owner})</h5>
+									<button
+										on:click={() =>
+											($path = `/event/${evt.id}`)}
+										>View</button
+									>
+									<button
+										on:click={() =>
+											($path = `/event/${evt.id}/edit`)}
+										>Edit</button
+									>
+									<button on:click={() => deleteEvent(evt)}
+										>Delete</button
+									>
+									<div>
+										{new Date(evt.start).toLocaleString(
+											"default",
+											{
+												hour: "numeric",
+												minute: "numeric",
+											}
+										)}—{new Date(evt.end).toLocaleString(
+											"default",
+											{
+												hour: "numeric",
+												minute: "numeric",
+											}
+										)}
+									</div>
+								</li>
+							{/each}
+						</ul>
+					</td>
 				{/each}
 			</tr>
 		{/each}

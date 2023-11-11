@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import json
 
-from flask import Flask, request, session
+from flask import Flask, request, session, send_from_directory
 from dataclasses import dataclass
 from db import get_db
 from user import UsersSlay
@@ -159,6 +159,15 @@ def update_user():
     
     return get_me()
 
+@app.route("/api/event/<id>", methods=["DELETE"])
+def delete_event(id):
+    event = Events.get(id)
+    if id is None: return error("evt not found")
+    if 'username' not in session or session['username'] != event.owner:
+        return error("you are not the owner (maury voice)")
+    with get_db() as con:
+        con.execute("DELETE FROM events WHERE id = ?", [id])
+    return json.dumps({"success": True})
 
 @app.route("/api/event", methods=["PUT"])
 def update_event():
@@ -286,7 +295,7 @@ def collab_user(username, id):
     Events.add_user(id, username)
     return json.dumps({"success": True})
 
-@app.route('/api/events', methods=["POST"])
+@app.route('/api/event', methods=["POST"])
 def create_event():
     if not request.is_json: return error("invalid req")
     data = request.json

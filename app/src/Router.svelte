@@ -5,6 +5,7 @@
 	import Login from "./pages/Login.svelte";
 	import Dashboard from "./pages/Dashboard.svelte";
 	import Settings from "./pages/Settings.svelte";
+	import Event from "./pages/Event.svelte";
 
 	/// e.g., set to /app so /home corresponds to example.com/app/home
 	const PREFIX = "";
@@ -23,6 +24,12 @@
 		"/login": Login,
 		"/dashboard": Dashboard,
 		"/settings": Settings,
+		"/event/(<id>\\d+)": {
+			component: Event,
+			transform: ({ id }) => {
+				id: Number.parseInt(id);
+			},
+		},
 	};
 
 	function isOptions<P, MG = P>(
