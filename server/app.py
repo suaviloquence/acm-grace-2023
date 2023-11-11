@@ -139,6 +139,47 @@ def update_user():
     
     return get_me()
 
+
+@app.route("/api/event", methods=["PUT"])
+def update_event():
+    if not request.is_json:
+        # return error invalid request
+        return error("Invalid request :pensive:")
+
+    data = request.json
+
+    if 'username' not in session: return error("not logged in")
+    username = session['username'];
+
+    event = Events.get(id)
+
+    if event is None:
+        return error("User doesnt exists :()")
+
+    if 'eventName' in data:
+        event.name = data['eventName']
+
+    event.date = None
+    if 'date' in data:
+        date = data['date']
+        if date < 0:
+            return error("This is not a real date")
+        event.date = date
+
+    event.location = None
+
+    if 'location' in data:
+        location = data['location']
+        if location[0] > 90 or data[0] < -90:
+            return error("This is not a real latitude")
+        if location[1] < -180 or location > 180:
+            return error("This is not a real longitude")
+        event.location = location
+
+    event.update()
+
+    return get_me()
+
 @app.route("/api/login", methods=['POST'])
 def login():
     if 'username' in session:
