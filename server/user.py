@@ -7,6 +7,7 @@ class UsersSlay(object):
 	password: bytes
 	name: str
 	pronouns: str
+	bio: str
 	age: int
 	year: int
 	pfp_id: int
@@ -33,7 +34,7 @@ class UsersSlay(object):
 
 	def create(self):
 		with get_db() as con:
-			con.execute("INSERT INTO users (username, password, name, pronouns, age, year, pfp) VALUES (?, ?, ?, ?, ?, ?, ?)", (self.username, self.password, self.name, self.pronouns, self.age, self.year, self.pfp_id))
+			con.execute("INSERT INTO users (username, password, name, pronouns, bio, age, year, pfp) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (self.username, self.password, self.name, self.pronouns, self.bio, self.age, self.year, self.pfp_id))
 	
 	@staticmethod
 	def create_pfp(pfp: bytes):
@@ -47,8 +48,8 @@ class UsersSlay(object):
 	
 	def update(self):
 		with get_db() as con:
-			con.execute("UPDATE users SET password = ?, name = ?, pronouns = ?, age = ?, year = ?, pfp = ? WHERE username = ?",
-					(self.password, self.name, self.pronouns, self.age, self.year, self.pfp_id, self.username))
+			con.execute("UPDATE users SET password = ?, name = ?, pronouns = ?, bio = ?, age = ?, year = ?, pfp = ? WHERE username = ?",
+					(self.password, self.name, self.pronouns, self.bio, self.age, self.year, self.pfp_id, self.username))
 
 	@staticmethod
 	def update_pfp(pfp_id: int, pfp: bytes):

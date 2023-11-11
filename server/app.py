@@ -31,6 +31,7 @@ def get_user(username):
             'username': user.username,
             'name': user.name,
             'pronouns': user.pronouns,
+            'bio': user.bio,
             'age': user.age,
             'year': user.year,
         })
@@ -78,8 +79,12 @@ def create_user():
     if 'pronouns' in data:
         pronouns = data['pronouns']
 
+    bio = None
+    if 'bio' in data:
+        bio = data['bio']
+
     age = None
-    
+
     if 'age' in data:
         age = data['age']
         if data['age'] >=100 or data['age'] <= 0:
@@ -91,11 +96,13 @@ def create_user():
             return error("This is not a valid graduation year")
         year = data['year']
 
-    user = UsersSlay(username, hashed, name, pronouns, age, year, 0, None)
+    user = UsersSlay(username, hashed, name, pronouns, bio, age, year, 0, None)
     
     user.create()
     
     return json.dumps({"success": True})
+
+
 
 @app.route("/api/user", methods=["PUT"])
 def update_user():
@@ -106,7 +113,7 @@ def update_user():
     data = request.json
 
     if 'username' not in session: return error("not logged in")
-    username = session['username'];
+    username = session['username']
     
     user = UsersSlay.get(username)
     
@@ -119,6 +126,10 @@ def update_user():
     user.pronouns = None
     if 'pronouns' in data:
         user.pronouns = data['pronouns']
+
+    user.bio = None
+    if 'bio' in data:
+        user.bio = data['bio']
 
     user.age = None
     
@@ -180,6 +191,26 @@ def update_event():
 
     return get_me()
 
+
+@app.route("/api/event/<id>/users/<username>", methods=['POST'])
+def invite(idcode, username):
+    event = Events.get(idcode)
+    if event is None:
+        return error("This event doesn't exist")
+    if event.owner == username:
+        return error("This user is the owner of the event")
+    # invite user to the event
+    event.add_user(username)
+
+@app.route("/api/event/<id>/users", methods=['PUT'])
+def accept_invite(idcode, username):
+    event = Events.get(idcode)
+    if event is None:
+        return error("This event doesn't exist")
+
+    with get_db() as con:
+        con.execute("UPDATE eventCollab SET accepted = TRUE")
+
 @app.route("/api/login", methods=['POST'])
 def login():
     if 'username' in session:
@@ -212,12 +243,20 @@ def logout():
 @app.route('/api/user/<username>/events')
 def get_users_Events(username):
     userevents = Events.get(username)
+    colabevents = Events.get_by_collabed_user(username)
     e = []
-    if userevents is not None:
-        for i in userevents:
-            e.append(i)
+    for i in userevents:
+        e.append(i)
+    for n in colabevents:
+        e.append(n)
     return json.dumps(e)
-
+def collab_user(username, id):
+    shared_event = Events.get(id)
+    if shared_event is None:
+        return error("Event doesn't exist")
+    if username == 'owner':
+        return error("Already own event")
+    Events.add_user(id, username)
 
 @app.route('/api/events', methods=["POST"])
 def create_event():

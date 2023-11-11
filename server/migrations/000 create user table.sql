@@ -8,7 +8,13 @@ CREATE TABLE users (
 	password BLOB NOT NULL,
 	name TEXT NOT NULL,
 	pronouns TEXT,
+	bio TEXT,
 	age INTEGER,
 	year INTEGER,
 	pfp INTEGER NOT NULL REFERENCES pfps(id) DEFAULT 0
+);
+
+CREATE TABLE friends (
+    username1 TEXT,
+    username2 TEXT
 );

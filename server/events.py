@@ -6,7 +6,8 @@ class Events(object):
     id: int
     eventName: str
     date: int
-    location: tuple
+    location_lat: float
+    location_lon: float
 
     # group chat and photo need to be implemented later
     
@@ -26,12 +27,13 @@ class Events(object):
     def add_user(self, username: str):
         with get_db() as con:
             con.execute("INSERT INTO eventCollab (events, name) VALUES (?, ?)", self.id, username) 
-    
+
+    # only append when invitation is accepted FIX THIS
     def get_by_collabed_user(username: str):
         ids = []
         with get_db() as con:
             cur = con.cursor()
-            cur.execute("SELECT * FROM eventCollab WHERE name = ?", username)
+            cur.execute("SELECT * FROM eventCollab WHERE name = ? AND accepted = TRUE", username)
             res = cur.fetchall()
             for row in res:
                 ids.append(row[0])
@@ -55,15 +57,15 @@ class Events(object):
     def create(self):
         with get_db() as con:
             cur = con.cursor()
-            res = cur.execute("INSERT INTO events (eventName, eventCollab, date, location) VALUES (?, ?, ?, ?) RETURNING id",
-                        (self.eventName, self.eventCollab, self.date, self.location))
+            res = cur.execute("INSERT INTO events (eventName, date, location_lat, location_lon) VALUES (?, ?, ?, ?) RETURNING id",
+                        (self.eventName, self.date, self.location_lat, self.location_lon))
             self.id = res.fetchone()[0]
 
 
     def update(self):
         with get_db() as con:
-            con.execute("UPDATE events SET eventName = ?, eventCollab = ?, date = ?, location = ? WHERE id = ?",
-                    (self.eventName, self.eventCollab, self.date, self.location, self.id))
+            con.execute("UPDATE events SET eventName = ?, date = ?, location_lat = ?, location_lon = ? WHERE id = ?",
+                    (self.eventName, self.date, self.location_lat, self.location_lon, self.id))
 
     def delete(self):
         with get_db() as con:
