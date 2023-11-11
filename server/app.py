@@ -295,6 +295,23 @@ def decline_invite(idcode, username):
         con.execute("DELETE FROM eventCollab where id = ?")
     return json.dumps({"success": True})
 
+@app.route("/api/event/<id>/users/<username>", methods=['GET'])
+def get_invitees(eventid):
+    event = Events.get(eventid)
+    invitee = []
+    if event is None:
+        return error("This event doesn't exist")
+    with get_db() as con:
+        cur = con.cursor()
+        cur.execute("SELECT * FROM eventCollab WHERE events = ? AND accepted = TRUE", [eventid])
+        res = cur.fetchall()
+        for i in res:
+            invitee.append(i)
+    return invitee
+
+
+
+
 
 @app.route("/api/user/<username>/pfp", methods=['GET'])
 def get_pfp(username, pfpid):
