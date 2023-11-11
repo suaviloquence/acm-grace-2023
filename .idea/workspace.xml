@@ -8,7 +8,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/events.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/events.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/migrations/000 create user table.sql" beforeDir="false" afterPath="$PROJECT_DIR$/server/migrations/000 create user table.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/migrations/001 create event table.sql" beforeDir="false" afterPath="$PROJECT_DIR$/server/migrations/001 create event table.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/user.py" afterDir="false" />
     </list>

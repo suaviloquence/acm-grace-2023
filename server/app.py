@@ -50,6 +50,12 @@ def get_event(id):
         })
     else:
         return error("event not found")
+
+@app.route("/api/user/me/friends", methods =['GET'])
+def get_friends():
+    # ADD AFTER ADDING FRIENDS TO USER.PY
+    pass
+
     
 @app.route("/api/user", methods=["POST"])
 def create_user():
@@ -210,6 +216,14 @@ def accept_invite(idcode, username):
 
     with get_db() as con:
         con.execute("UPDATE eventCollab SET accepted = TRUE")
+@app.route("/api/event/<id>/users/<username>", methods=['DELETE'])
+def decline_invite(idcode, username):
+    event = Events.get(idcode)
+    if event is None:
+        return error("This event doesn't exist")
+
+    with get_db() as con:
+        con.execute("DELETE FROM eventCollab where id = ?")
 
 @app.route("/api/login", methods=['POST'])
 def login():
@@ -292,7 +306,6 @@ def create_event():
     
     return json.dumps({"success": True})
 
-
 @app.route("/public/<path:path>", methods=['GET'])
 def serve_public(path):
     return send_from_directory('../public', path)
@@ -301,6 +314,4 @@ def serve_public(path):
 @app.route('/<path:path>')
 def serve_page(path):
     return app.send_static_file("index.html")
-
-
 
