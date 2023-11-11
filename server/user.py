@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from db import get_db
 
+
 @dataclass
 class UsersSlay(object):
 	username: str
@@ -36,6 +37,15 @@ class UsersSlay(object):
 		with get_db() as con:
 			cur = con.cursor()
 			cur.execute("SELECT * FROM friends WHERE username1 = ?", [self.username])
+
+	def add_friend(self, other_username):
+		with get_db() as con:
+			con.execute("UPDATE friends SET username1 = ?, username2 = ?", [self.username, other_username])
+
+	@staticmethod
+	def delete_friend(other_username):
+		with get_db() as con:
+			con.execute("DELETE FROM friends WHERE username2 = ?", [other_username])
 
 	def create(self):
 		with get_db() as con:
