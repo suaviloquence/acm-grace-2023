@@ -210,6 +210,14 @@ def accept_invite(idcode, username):
 
     with get_db() as con:
         con.execute("UPDATE eventCollab SET accepted = TRUE")
+@app.route("/api/event/<id>/users/<username>", methods=['DELETE'])
+def decline_invite(idcode, username):
+    event = Events.get(idcode)
+    if event is None:
+        return error("This event doesn't exist")
+
+    with get_db() as con:
+        con.execute("DELETE FROM eventCollab where id = ?")
 
 @app.route("/api/login", methods=['POST'])
 def login():
