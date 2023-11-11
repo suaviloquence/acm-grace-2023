@@ -268,11 +268,21 @@
 				</div>
 				<div>
 					<label for="lat">Latitude: </label>
-					<input type="number" id="lat" bind:value={location_lat} />
+					<input
+						type="number"
+						id="lat"
+						bind:value={location_lat}
+						step="any"
+					/>
 				</div>
 				<div>
 					<label for="lon">Longitude: </label>
-					<input type="number" id="lon" bind:value={location_lon} />
+					<input
+						type="number"
+						id="lon"
+						bind:value={location_lon}
+						step="any"
+					/>
 				</div>
 				<input type="submit" value="Create" />
 			</form>

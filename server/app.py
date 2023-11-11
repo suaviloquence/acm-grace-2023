@@ -46,11 +46,7 @@ def get_event(id):
     """ get the user from the database """
     event = Events.get(id)
     if event is not None:
-        return json.dumps({
-            'eventName': event.EventName,
-            'date': event.date,
-            'location': event.location,
-        })
+        return json.dumps(event.__dict__)
     else:
         return error("event not found")
 
@@ -263,8 +259,8 @@ def update_event():
 
 
 @app.route("/api/event/<id>/users/<username>", methods=['POST'])
-def invite(idcode, username):
-    event = Events.get(idcode)
+def invite(id, username):
+    event = Events.get(id)
     if event is None:
         return error("This event doesn't exist")
     if event.owner == username:
@@ -274,25 +270,30 @@ def invite(idcode, username):
     return json.dumps({"success": True})
 
 @app.route("/api/event/<id>/users", methods=['PUT'])
-def accept_invite(idcode, username):
-    event = Events.get(idcode)
+def accept_invite(id):
+    event = Events.get(id)
     if event is None:
         return error("This event doesn't exist")
+    
+    if 'username' not in session:
+        return error("not logged in")
+    
+    username = session['username']
 
     with get_db() as con:
-        con.execute("UPDATE eventCollab SET accepted = TRUE")
+        con.execute("UPDATE eventCollab SET accepted = TRUE WHERE ")
 
     return json.dumps({"success": True})
 
 
 @app.route("/api/event/<id>/users/<username>", methods=['DELETE'])
-def decline_invite(idcode, username):
-    event = Events.get(idcode)
+def decline_invite(id, username):
+    event = Events.get(id)
     if event is None:
         return error("This event doesn't exist")
 
     with get_db() as con:
-        con.execute("DELETE FROM eventCollab where id = ?")
+        con.execute("DELETE FROM eventCollab where events = ? AND name = ?", [id, username])
     return json.dumps({"success": True})
 
 

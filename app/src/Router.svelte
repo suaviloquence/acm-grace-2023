@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { SvelteComponent } from "svelte";
+	import { createEventDispatcher, type SvelteComponent } from "svelte";
 	import { path } from "./stores";
 	import Signup from "./pages/Signup.svelte";
 	import Login from "./pages/Login.svelte";
@@ -24,11 +24,12 @@
 		"/login": Login,
 		"/dashboard": Dashboard,
 		"/settings": Settings,
-		"/event/(<id>\\d+)": {
+		"/event/(?<id>\\d+)(?<edit>(/edit)?)": {
 			component: Event,
-			transform: ({ id }) => {
-				id: Number.parseInt(id);
-			},
+			transform: ({ id, edit }) => ({
+				id: Number.parseInt(id),
+				edit: !!edit,
+			}),
 		},
 	};
 
