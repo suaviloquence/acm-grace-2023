@@ -174,10 +174,26 @@ def create_event():
     
     owner = session['username']
     
+    # data[]
     
     # validate event data into an event object
+    if 'eventName' not in data:
+        return error("Event Name doesn't exist")
+    if 'date' not in data:
+        return error("Date doesn't exist")
+    if 'location_lat' not in data:
+        return error("Location (latitude) doesn't exist")
+    if 'location_lon' not in data:
+        return error("Location (longitude) doesn't exist")
+    if data['date'] <= 0:
+        return error("Not a valid date")
+    if -90 <= data['location_lat'] <= 90 is False:
+        return error("Not a valid latitude")
+    if -180 <= data['location_lon'] <= 180 is False:
+        return error("Not a valid longitude")
+
     
-    event = ... # TODO
+    event = Events(data[0], data[1], data[2], data[3]) # TODO
     event.create()
     
     return json.dumps({"success": True})
