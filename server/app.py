@@ -7,6 +7,7 @@ from db import get_db
 from user import UsersSlay
 import bcrypt
 import os.path
+from events import Events
 
 
 app = Flask(__name__, static_folder=os.path.abspath("../public"))
@@ -113,6 +114,16 @@ def logout():
         del session['username']
     return json.dumps({"success": True})
     
+def get_users_Events(username):
+    """ get the user from the database """
+    userevents = Events.get(username)
+    if userevents is not None:
+        e = []
+        for i in userevents:
+            e.append(i)
+        return json.dumps(e)
+    else:
+        return error("user has no events")
 
 
 @app.route("/public/<path:path>", methods=['GET'])
@@ -123,4 +134,6 @@ def serve_public(path):
 @app.route('/<path:path>')
 def serve_page(path):
     return app.send_static_file("index.html")
+
+
 
