@@ -104,19 +104,23 @@
 	let name: string;
 	let location_lat: number;
 	let location_lon: number;
-	let time = "";
-	$: console.dir(time);
+	let start_time = "";
+	let end_time = "";
 
 	async function addEvent() {
-		let res = await fetch(`/api/events`, {
+		let res = await fetch(`/api/user/me/events`, {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({
 				name,
-				date:
+				start:
 					selected.getTime() +
-					Number.parseInt(time.split(":")[0]) * 60 * 60 * 1000 +
-					Number.parseInt(time.split(":")[1]) * 60 * 1000,
+					Number.parseInt(start_time.split(":")[0]) * 60 * 60 * 1000 +
+					Number.parseInt(start_time.split(":")[1]) * 60 * 1000,
+				end:
+					selected.getTime() +
+					Number.parseInt(end_time.split(":")[0]) * 60 * 60 * 1000 +
+					Number.parseInt(end_time.split(":")[1]) * 60 * 1000,
 				location_lat,
 				location_lon,
 			}),
@@ -206,8 +210,12 @@
 					<input type="text" id="name" bind:value={name} />
 				</div>
 				<div>
-					<label for="time">Time: </label>
-					<input type="time" id="time" bind:value={time} />
+					<label for="start">Time: </label>
+					<input type="time" id="start" bind:value={start_time} />
+				</div>
+				<div>
+					<label for="end">Time: </label>
+					<input type="time" id="end" bind:value={end_time} />
 				</div>
 				<div>
 					<label for="lat">Latitude: </label>

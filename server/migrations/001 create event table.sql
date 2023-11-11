@@ -2,7 +2,8 @@ CREATE TABLE events (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     eventName TEXT NOT NULL,
     owner TEXT NOT NULL REFERENCES users(username) ON DELETE CASCADE,
-    date INT NOT NULL,
+    start INT NOT NULL,
+    end INT NOT NULL,
     location_lat REAL NOT NULL,
     location_lon REAL NOT NULL
 );

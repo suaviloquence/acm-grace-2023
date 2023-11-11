@@ -1549,24 +1549,24 @@
 
 	function get_each_context(ctx, list, i) {
 		const child_ctx = ctx.slice();
-		child_ctx[22] = list[i];
+		child_ctx[24] = list[i];
 		return child_ctx;
 	}
 
 	function get_each_context_1(ctx, list, i) {
 		const child_ctx = ctx.slice();
-		child_ctx[25] = list[i];
+		child_ctx[27] = list[i];
 		return child_ctx;
 	}
 
-	// (110:0) {#if $user}
+	// (113:0) {#if $user}
 	function create_if_block_2(ctx) {
 		let h2;
 		let t0;
-		let t1_value = /*$user*/ ctx[7].name + "";
+		let t1_value = /*$user*/ ctx[8].name + "";
 		let t1;
 		let t2;
-		let if_block = /*$user*/ ctx[7].pronouns && create_if_block_3(ctx);
+		let if_block = /*$user*/ ctx[8].pronouns && create_if_block_3(ctx);
 
 		return {
 			c() {
@@ -1584,9 +1584,9 @@
 				if (if_block) if_block.m(h2, null);
 			},
 			p(ctx, dirty) {
-				if (dirty & /*$user*/ 128 && t1_value !== (t1_value = /*$user*/ ctx[7].name + "")) set_data(t1, t1_value);
+				if (dirty & /*$user*/ 256 && t1_value !== (t1_value = /*$user*/ ctx[8].name + "")) set_data(t1, t1_value);
 
-				if (/*$user*/ ctx[7].pronouns) {
+				if (/*$user*/ ctx[8].pronouns) {
 					if (if_block) {
 						if_block.p(ctx, dirty);
 					} else {
@@ -1609,10 +1609,10 @@
 		};
 	}
 
-	// (113:2) {#if $user.pronouns}
+	// (116:2) {#if $user.pronouns}
 	function create_if_block_3(ctx) {
 		let t0;
-		let t1_value = /*$user*/ ctx[7].pronouns + "";
+		let t1_value = /*$user*/ ctx[8].pronouns + "";
 		let t1;
 		let t2;
 
@@ -1628,7 +1628,7 @@
 				insert(target, t2, anchor);
 			},
 			p(ctx, dirty) {
-				if (dirty & /*$user*/ 128 && t1_value !== (t1_value = /*$user*/ ctx[7].pronouns + "")) set_data(t1, t1_value);
+				if (dirty & /*$user*/ 256 && t1_value !== (t1_value = /*$user*/ ctx[8].pronouns + "")) set_data(t1, t1_value);
 			},
 			d(detaching) {
 				if (detaching) {
@@ -1640,9 +1640,9 @@
 		};
 	}
 
-	// (158:8) {#if day.month}
+	// (161:8) {#if day.month}
 	function create_if_block_1(ctx) {
-		let t_value = /*day*/ ctx[25].month + "";
+		let t_value = /*day*/ ctx[27].month + "";
 		let t;
 
 		return {
@@ -1653,7 +1653,7 @@
 				insert(target, t, anchor);
 			},
 			p(ctx, dirty) {
-				if (dirty & /*weeks*/ 2 && t_value !== (t_value = /*day*/ ctx[25].month + "")) set_data(t, t_value);
+				if (dirty & /*weeks*/ 2 && t_value !== (t_value = /*day*/ ctx[27].month + "")) set_data(t, t_value);
 			},
 			d(detaching) {
 				if (detaching) {
@@ -1663,20 +1663,20 @@
 		};
 	}
 
-	// (154:4) {#each week as day}
+	// (157:4) {#each week as day}
 	function create_each_block_1(ctx) {
 		let td;
 		let h4;
 		let button;
 		let t0;
-		let t1_value = /*day*/ ctx[25].day + "";
+		let t1_value = /*day*/ ctx[27].day + "";
 		let t1;
 		let mounted;
 		let dispose;
-		let if_block = /*day*/ ctx[25].month && create_if_block_1(ctx);
+		let if_block = /*day*/ ctx[27].month && create_if_block_1(ctx);
 
 		function click_handler_2() {
-			return /*click_handler_2*/ ctx[15](/*day*/ ctx[25]);
+			return /*click_handler_2*/ ctx[16](/*day*/ ctx[27]);
 		}
 
 		return {
@@ -1704,7 +1704,7 @@
 			p(new_ctx, dirty) {
 				ctx = new_ctx;
 
-				if (/*day*/ ctx[25].month) {
+				if (/*day*/ ctx[27].month) {
 					if (if_block) {
 						if_block.p(ctx, dirty);
 					} else {
@@ -1717,7 +1717,7 @@
 					if_block = null;
 				}
 
-				if (dirty & /*weeks*/ 2 && t1_value !== (t1_value = /*day*/ ctx[25].day + "")) set_data(t1, t1_value);
+				if (dirty & /*weeks*/ 2 && t1_value !== (t1_value = /*day*/ ctx[27].day + "")) set_data(t1, t1_value);
 			},
 			d(detaching) {
 				if (detaching) {
@@ -1731,11 +1731,11 @@
 		};
 	}
 
-	// (152:2) {#each weeks as week}
+	// (155:2) {#each weeks as week}
 	function create_each_block(ctx) {
 		let tr;
 		let t;
-		let each_value_1 = ensure_array_like(/*week*/ ctx[22]);
+		let each_value_1 = ensure_array_like(/*week*/ ctx[24]);
 		let each_blocks = [];
 
 		for (let i = 0; i < each_value_1.length; i += 1) {
@@ -1764,8 +1764,8 @@
 				append(tr, t);
 			},
 			p(ctx, dirty) {
-				if (dirty & /*select, weeks*/ 258) {
-					each_value_1 = ensure_array_like(/*week*/ ctx[22]);
+				if (dirty & /*select, weeks*/ 514) {
+					each_value_1 = ensure_array_like(/*week*/ ctx[24]);
 					let i;
 
 					for (i = 0; i < each_value_1.length; i += 1) {
@@ -1797,9 +1797,9 @@
 		};
 	}
 
-	// (178:1) {#if showPopup}
+	// (181:1) {#if showPopup}
 	function create_if_block$1(ctx) {
-		let div4;
+		let div5;
 		let form;
 		let div0;
 		let label0;
@@ -1821,13 +1821,18 @@
 		let t10;
 		let input3;
 		let t11;
+		let div4;
+		let label4;
+		let t13;
 		let input4;
+		let t14;
+		let input5;
 		let mounted;
 		let dispose;
 
 		return {
 			c() {
-				div4 = element("div");
+				div5 = element("div");
 				form = element("form");
 				div0 = element("div");
 				label0 = element("label");
@@ -1843,94 +1848,114 @@
 				t5 = space();
 				div2 = element("div");
 				label2 = element("label");
-				label2.textContent = "Latitude:";
+				label2.textContent = "Time:";
 				t7 = space();
 				input2 = element("input");
 				t8 = space();
 				div3 = element("div");
 				label3 = element("label");
-				label3.textContent = "Longitude:";
+				label3.textContent = "Latitude:";
 				t10 = space();
 				input3 = element("input");
 				t11 = space();
+				div4 = element("div");
+				label4 = element("label");
+				label4.textContent = "Longitude:";
+				t13 = space();
 				input4 = element("input");
+				t14 = space();
+				input5 = element("input");
 				attr(label0, "for", "name");
 				attr(input0, "type", "text");
 				attr(input0, "id", "name");
-				attr(label1, "for", "time");
+				attr(label1, "for", "start");
 				attr(input1, "type", "time");
-				attr(input1, "id", "time");
-				attr(label2, "for", "lat");
-				attr(input2, "type", "number");
-				attr(input2, "id", "lat");
-				attr(label3, "for", "lon");
+				attr(input1, "id", "start");
+				attr(label2, "for", "end");
+				attr(input2, "type", "time");
+				attr(input2, "id", "end");
+				attr(label3, "for", "lat");
 				attr(input3, "type", "number");
-				attr(input3, "id", "lon");
-				attr(input4, "type", "submit");
-				input4.value = "Create";
-				attr(div4, "id", "popup");
+				attr(input3, "id", "lat");
+				attr(label4, "for", "lon");
+				attr(input4, "type", "number");
+				attr(input4, "id", "lon");
+				attr(input5, "type", "submit");
+				input5.value = "Create";
+				attr(div5, "id", "popup");
 			},
 			m(target, anchor) {
-				insert(target, div4, anchor);
-				append(div4, form);
+				insert(target, div5, anchor);
+				append(div5, form);
 				append(form, div0);
 				append(div0, label0);
 				append(div0, t1);
 				append(div0, input0);
-				set_input_value(input0, /*name*/ ctx[4]);
+				set_input_value(input0, /*name*/ ctx[3]);
 				append(form, t2);
 				append(form, div1);
 				append(div1, label1);
 				append(div1, t4);
 				append(div1, input1);
-				set_input_value(input1, /*time*/ ctx[2]);
+				set_input_value(input1, /*start_time*/ ctx[6]);
 				append(form, t5);
 				append(form, div2);
 				append(div2, label2);
 				append(div2, t7);
 				append(div2, input2);
-				set_input_value(input2, /*location_lat*/ ctx[5]);
+				set_input_value(input2, /*end_time*/ ctx[7]);
 				append(form, t8);
 				append(form, div3);
 				append(div3, label3);
 				append(div3, t10);
 				append(div3, input3);
-				set_input_value(input3, /*location_lon*/ ctx[6]);
+				set_input_value(input3, /*location_lat*/ ctx[4]);
 				append(form, t11);
-				append(form, input4);
+				append(form, div4);
+				append(div4, label4);
+				append(div4, t13);
+				append(div4, input4);
+				set_input_value(input4, /*location_lon*/ ctx[5]);
+				append(form, t14);
+				append(form, input5);
 
 				if (!mounted) {
 					dispose = [
-						listen(input0, "input", /*input0_input_handler*/ ctx[17]),
-						listen(input1, "input", /*input1_input_handler*/ ctx[18]),
-						listen(input2, "input", /*input2_input_handler*/ ctx[19]),
-						listen(input3, "input", /*input3_input_handler*/ ctx[20]),
-						listen(form, "submit", prevent_default(/*addEvent*/ ctx[9]))
+						listen(input0, "input", /*input0_input_handler*/ ctx[18]),
+						listen(input1, "input", /*input1_input_handler*/ ctx[19]),
+						listen(input2, "input", /*input2_input_handler*/ ctx[20]),
+						listen(input3, "input", /*input3_input_handler*/ ctx[21]),
+						listen(input4, "input", /*input4_input_handler*/ ctx[22]),
+						listen(form, "submit", prevent_default(/*addEvent*/ ctx[10]))
 					];
 
 					mounted = true;
 				}
 			},
 			p(ctx, dirty) {
-				if (dirty & /*name*/ 16 && input0.value !== /*name*/ ctx[4]) {
-					set_input_value(input0, /*name*/ ctx[4]);
+				if (dirty & /*name*/ 8 && input0.value !== /*name*/ ctx[3]) {
+					set_input_value(input0, /*name*/ ctx[3]);
 				}
 
-				if (dirty & /*time*/ 4) {
-					set_input_value(input1, /*time*/ ctx[2]);
+				if (dirty & /*start_time*/ 64) {
+					set_input_value(input1, /*start_time*/ ctx[6]);
 				}
 
-				if (dirty & /*location_lat*/ 32 && to_number(input2.value) !== /*location_lat*/ ctx[5]) {
-					set_input_value(input2, /*location_lat*/ ctx[5]);
+				if (dirty & /*end_time*/ 128) {
+					set_input_value(input2, /*end_time*/ ctx[7]);
 				}
 
-				if (dirty & /*location_lon*/ 64 && to_number(input3.value) !== /*location_lon*/ ctx[6]) {
-					set_input_value(input3, /*location_lon*/ ctx[6]);
+				if (dirty & /*location_lat*/ 16 && to_number(input3.value) !== /*location_lat*/ ctx[4]) {
+					set_input_value(input3, /*location_lat*/ ctx[4]);
+				}
+
+				if (dirty & /*location_lon*/ 32 && to_number(input4.value) !== /*location_lon*/ ctx[5]) {
+					set_input_value(input4, /*location_lon*/ ctx[5]);
 				}
 			},
 			d(detaching) {
 				if (detaching) {
-					detach(div4);
+					detach(div5);
 				}
 
 				mounted = false;
@@ -1968,7 +1993,7 @@
 		let mounted;
 		let dispose;
 		loggedinbar = new LoggedInBar({});
-		let if_block0 = /*$user*/ ctx[7] && create_if_block_2(ctx);
+		let if_block0 = /*$user*/ ctx[8] && create_if_block_2(ctx);
 		let each_value = ensure_array_like(/*weeks*/ ctx[1]);
 		let each_blocks = [];
 
@@ -1976,7 +2001,7 @@
 			each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
 		}
 
-		let if_block1 = /*showPopup*/ ctx[3] && create_if_block$1(ctx);
+		let if_block1 = /*showPopup*/ ctx[2] && create_if_block$1(ctx);
 
 		return {
 			c() {
@@ -2014,7 +2039,7 @@
 				if (if_block1) if_block1.c();
 				attr(table, "id", "calendar");
 				attr(table, "class", "svelte-pqyj29");
-				button2.disabled = /*showPopup*/ ctx[3];
+				button2.disabled = /*showPopup*/ ctx[2];
 			},
 			m(target, anchor) {
 				mount_component(loggedinbar, target, anchor);
@@ -2052,16 +2077,16 @@
 
 				if (!mounted) {
 					dispose = [
-						listen(button0, "click", /*click_handler*/ ctx[13]),
-						listen(button1, "click", /*click_handler_1*/ ctx[14]),
-						listen(button2, "click", /*click_handler_3*/ ctx[16])
+						listen(button0, "click", /*click_handler*/ ctx[14]),
+						listen(button1, "click", /*click_handler_1*/ ctx[15]),
+						listen(button2, "click", /*click_handler_3*/ ctx[17])
 					];
 
 					mounted = true;
 				}
 			},
 			p(ctx, [dirty]) {
-				if (/*$user*/ ctx[7]) {
+				if (/*$user*/ ctx[8]) {
 					if (if_block0) {
 						if_block0.p(ctx, dirty);
 					} else {
@@ -2076,7 +2101,7 @@
 
 				if ((!current || dirty & /*selected*/ 1) && t4_value !== (t4_value = /*selected*/ ctx[0].toLocaleString("default", { month: "long" }) + "")) set_data(t4, t4_value);
 
-				if (dirty & /*weeks, select*/ 258) {
+				if (dirty & /*weeks, select*/ 514) {
 					each_value = ensure_array_like(/*weeks*/ ctx[1]);
 					let i;
 
@@ -2101,11 +2126,11 @@
 
 				if ((!current || dirty & /*selected*/ 1) && t23_value !== (t23_value = /*selected*/ ctx[0].toLocaleDateString("default", { month: "long", day: "numeric" }) + "")) set_data(t23, t23_value);
 
-				if (!current || dirty & /*showPopup*/ 8) {
-					button2.disabled = /*showPopup*/ ctx[3];
+				if (!current || dirty & /*showPopup*/ 4) {
+					button2.disabled = /*showPopup*/ ctx[2];
 				}
 
-				if (/*showPopup*/ ctx[3]) {
+				if (/*showPopup*/ ctx[2]) {
 					if (if_block1) {
 						if_block1.p(ctx, dirty);
 					} else {
@@ -2150,7 +2175,7 @@
 
 	function instance$3($$self, $$props, $$invalidate) {
 		let $user;
-		component_subscribe($$self, user, $$value => $$invalidate(7, $user = $$value));
+		component_subscribe($$self, user, $$value => $$invalidate(8, $user = $$value));
 		let selected = new Date();
 		selected.setHours(0);
 		selected.setMinutes(0);
@@ -2184,7 +2209,7 @@
 				prevs--;
 			}
 
-			$$invalidate(11, start = buffer);
+			$$invalidate(12, start = buffer);
 			buffer = new Date(first);
 
 			while (buffer.getMonth() == first.getMonth()) {
@@ -2217,11 +2242,11 @@
 				weeks.push(week);
 			}
 
-			$$invalidate(12, end = buffer);
+			$$invalidate(13, end = buffer);
 		}
 
 		fetch(`/api/users/me/events`).then(res => res.json()).then(evt => {
-			$$invalidate(10, events = evt);
+			$$invalidate(11, events = evt);
 		});
 
 		function select(day) {
@@ -2231,23 +2256,25 @@
 		let name;
 		let location_lat;
 		let location_lon;
-		let time = "";
+		let start_time = "";
+		let end_time = "";
 
 		async function addEvent() {
-			let res = await fetch(`/api/events`, {
+			let res = await fetch(`/api/user/me/events`, {
 				method: "POST",
 				headers: { "content-type": "application/json" },
 				body: JSON.stringify({
 					name,
-					date: selected.getTime() + Number.parseInt(time.split(":")[0]) * 60 * 60 * 1000 + Number.parseInt(time.split(":")[1]) * 60 * 1000,
+					start: selected.getTime() + Number.parseInt(start_time.split(":")[0]) * 60 * 60 * 1000 + Number.parseInt(start_time.split(":")[1]) * 60 * 1000,
+					end: selected.getTime() + Number.parseInt(end_time.split(":")[0]) * 60 * 60 * 1000 + Number.parseInt(end_time.split(":")[1]) * 60 * 1000,
 					location_lat,
 					location_lon
 				})
 			});
 
 			let evt = await res.json();
-			$$invalidate(10, events = [...events, evt]);
-			$$invalidate(3, showPopup = false);
+			$$invalidate(11, events = [...events, evt]);
+			$$invalidate(2, showPopup = false);
 		}
 
 		const click_handler = () => {
@@ -2273,30 +2300,35 @@
 		};
 
 		const click_handler_2 = day => select(day);
-		const click_handler_3 = () => $$invalidate(3, showPopup = true);
+		const click_handler_3 = () => $$invalidate(2, showPopup = true);
 
 		function input0_input_handler() {
 			name = this.value;
-			$$invalidate(4, name);
+			$$invalidate(3, name);
 		}
 
 		function input1_input_handler() {
-			time = this.value;
-			$$invalidate(2, time);
+			start_time = this.value;
+			$$invalidate(6, start_time);
 		}
 
 		function input2_input_handler() {
-			location_lat = to_number(this.value);
-			$$invalidate(5, location_lat);
+			end_time = this.value;
+			$$invalidate(7, end_time);
 		}
 
 		function input3_input_handler() {
+			location_lat = to_number(this.value);
+			$$invalidate(4, location_lat);
+		}
+
+		function input4_input_handler() {
 			location_lon = to_number(this.value);
-			$$invalidate(6, location_lon);
+			$$invalidate(5, location_lon);
 		}
 
 		$$self.$$.update = () => {
-			if ($$self.$$.dirty & /*events, start, end, weeks*/ 7170) {
+			if ($$self.$$.dirty & /*events, start, end, weeks*/ 14338) {
 				if (events) {
 					for (const evt of events) {
 						if (evt.date <= start.getTime() || evt.date >= end.getTime()) continue;
@@ -2313,10 +2345,6 @@
 				}
 			}
 
-			if ($$self.$$.dirty & /*time*/ 4) {
-				console.dir(time);
-			}
-
 			if ($$self.$$.dirty & /*selected*/ 1) {
 				updateCalendar(selected);
 			}
@@ -2325,11 +2353,12 @@
 		return [
 			selected,
 			weeks,
-			time,
 			showPopup,
 			name,
 			location_lat,
 			location_lon,
+			start_time,
+			end_time,
 			$user,
 			select,
 			addEvent,
@@ -2343,7 +2372,8 @@
 			input0_input_handler,
 			input1_input_handler,
 			input2_input_handler,
-			input3_input_handler
+			input3_input_handler,
+			input4_input_handler
 		];
 	}
 

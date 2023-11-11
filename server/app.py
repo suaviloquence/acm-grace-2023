@@ -8,6 +8,9 @@ from user import UsersSlay
 import bcrypt
 import os.path
 from events import Events
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 app = Flask(__name__, static_folder=os.path.abspath("../public"))
@@ -207,6 +210,7 @@ def invite(idcode, username):
         return error("This user is the owner of the event")
     # invite user to the event
     event.add_user(username)
+    return json.dumps({"success": True})
 
 @app.route("/api/event/<id>/users", methods=['PUT'])
 def accept_invite(idcode, username):
@@ -216,6 +220,8 @@ def accept_invite(idcode, username):
 
     with get_db() as con:
         con.execute("UPDATE eventCollab SET accepted = TRUE")
+    return json.dumps({"success": True})
+
 @app.route("/api/event/<id>/users/<username>", methods=['DELETE'])
 def decline_invite(idcode, username):
     event = Events.get(idcode)
@@ -224,6 +230,7 @@ def decline_invite(idcode, username):
 
     with get_db() as con:
         con.execute("DELETE FROM eventCollab where id = ?")
+    return json.dumps({"success": True})
 
 @app.route("/api/login", methods=['POST'])
 def login():
@@ -254,16 +261,22 @@ def logout():
         del session['username']
     return json.dumps({"success": True})
     
+@app.route('/api/user/me/events')
+def get_my_events():
+    if 'username' not in session: return error('not logged in')
+    return get_users_Events(session['username']);
+
 @app.route('/api/user/<username>/events')
 def get_users_Events(username):
-    userevents = Events.get(username)
+    userevents = Events.get_by_user(username)
     colabevents = Events.get_by_collabed_user(username)
     e = []
     for i in userevents:
         e.append(i)
     for n in colabevents:
         e.append(n)
-    return json.dumps(e)
+    return json.dumps([z.__dict__ for z in e])
+
 def collab_user(username, id):
     shared_event = Events.get(id)
     if shared_event is None:
@@ -271,6 +284,7 @@ def collab_user(username, id):
     if username == 'owner':
         return error("Already own event")
     Events.add_user(id, username)
+    return json.dumps({"success": True})
 
 @app.route('/api/events', methods=["POST"])
 def create_event():
@@ -285,26 +299,29 @@ def create_event():
     # data[]
     
     # validate event data into an event object
-    if 'eventName' not in data:
+    if 'name' not in data:
         return error("Event Name doesn't exist")
-    if 'date' not in data:
-        return error("Date doesn't exist")
+    if 'start' not in data:
+        return error("start doesn't exist")
+    if 'end' not in data:
+        return error("end doesn't exist")
     if 'location_lat' not in data:
         return error("Location (latitude) doesn't exist")
     if 'location_lon' not in data:
         return error("Location (longitude) doesn't exist")
-    if data['date'] <= 0:
+    if data['start'] <= 0 or data['end'] <= 0:
         return error("Not a valid date")
+    if data['start'] >= data['end']: return error("invalid start/end distro")
     if not (-90 <= data['location_lat'] <= 90):
         return error("Not a valid latitude")
     if not (-180 <= data['location_lon'] <= 180):
         return error("Not a valid longitude")
 
     
-    event = Events(data[0], data[1], (data[2], data[3])) # TODO
+    event = Events(-1, data['name'], owner, data['start'], data['end'], data['location_lat'], data['location_lon'])
     event.create()
     
-    return json.dumps(event)
+    return json.dumps(event.__dict__)
 
 @app.route("/public/<path:path>", methods=['GET'])
 def serve_public(path):
