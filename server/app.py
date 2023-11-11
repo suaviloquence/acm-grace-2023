@@ -174,7 +174,6 @@ def create_event():
     
     owner = session['username']
     
-    data[]
     
     # validate event data into an event object
     

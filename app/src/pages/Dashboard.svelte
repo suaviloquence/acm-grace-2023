@@ -1,32 +1,14 @@
 <script lang="ts">
-	import { path } from "../stores";
-	import { getUsernameCookie } from "../util";
-
-	let username = getUsernameCookie();
-	if (!username) {
-		$path = "/";
-	}
-
-	let info_pms = fetch("/api/user/me")
-		.then((res) => res.json())
-		.catch(logOut);
-
-	async function logOut() {
-		await fetch("/api/logout");
-		localStorage.removeItem("username");
-		$path = "/";
-	}
+	import LoggedInBar from "../components/LoggedInBar.svelte";
+	import { user, path } from "../stores";
 </script>
 
-<button on:click={logOut}>Log out</button>
-
-{#await info_pms}
-	Loading user info...
-{:then info}
+<LoggedInBar />
+{#if $user}
 	<h2>
-		Hello, {info.name}
-		{#if info.pronouns}
-			({info.pronouns})
+		Hello, {$user.name}
+		{#if $user.pronouns}
+			({$user.pronouns})
 		{/if}
 	</h2>
-{/await}
+{/if}

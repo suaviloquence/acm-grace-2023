@@ -4,6 +4,7 @@
 	import Signup from "./pages/Signup.svelte";
 	import Login from "./pages/Login.svelte";
 	import Dashboard from "./pages/Dashboard.svelte";
+	import Settings from "./pages/Settings.svelte";
 
 	/// e.g., set to /app so /home corresponds to example.com/app/home
 	const PREFIX = "";
@@ -21,6 +22,7 @@
 		"/signup": Signup,
 		"/login": Login,
 		"/dashboard": Dashboard,
+		"/settings": Settings,
 	};
 
 	function isOptions<P, MG = P>(

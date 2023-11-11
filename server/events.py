@@ -4,14 +4,12 @@ from db import get_db
 @dataclass
 class Events(object):
     eventName = str
-    # list of users is the data for the users involved?
-    eventCollab = list = []
     date = int
     location = tuple
 
     # group chat and photo need to be implemented later
     
-    @static_method
+    @staticmethod
     def get_by_user(username: str):
         l = []
         with get_db() as con:
