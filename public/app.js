@@ -155,6 +155,14 @@
 	}
 
 	/**
+	 * @returns {void} */
+	function destroy_each(iterations, detaching) {
+		for (let i = 0; i < iterations.length; i += 1) {
+			if (iterations[i]) iterations[i].d(detaching);
+		}
+	}
+
+	/**
 	 * @template {keyof HTMLElementTagNameMap} K
 	 * @param {K} name
 	 * @returns {HTMLElementTagNameMap[K]}
@@ -591,6 +599,14 @@
 			child_ctx[info.error] = resolved;
 		}
 		info.block.p(child_ctx, dirty);
+	}
+
+	// general each functions:
+
+	function ensure_array_like(array_like_or_iterator) {
+		return array_like_or_iterator?.length !== undefined
+			? array_like_or_iterator
+			: Array.from(array_like_or_iterator);
 	}
 
 	/** @returns {{}} */
@@ -1531,14 +1547,26 @@
 		append_styles(target, "svelte-pqyj29", "#calendar.svelte-pqyj29{width:100%}");
 	}
 
-	// (11:0) {#if $user}
-	function create_if_block$1(ctx) {
+	function get_each_context(ctx, list, i) {
+		const child_ctx = ctx.slice();
+		child_ctx[20] = list[i];
+		return child_ctx;
+	}
+
+	function get_each_context_1(ctx, list, i) {
+		const child_ctx = ctx.slice();
+		child_ctx[23] = list[i];
+		return child_ctx;
+	}
+
+	// (103:0) {#if $user}
+	function create_if_block_2(ctx) {
 		let h2;
 		let t0;
-		let t1_value = /*$user*/ ctx[0].name + "";
+		let t1_value = /*$user*/ ctx[6].name + "";
 		let t1;
 		let t2;
-		let if_block = /*$user*/ ctx[0].pronouns && create_if_block_1(ctx);
+		let if_block = /*$user*/ ctx[6].pronouns && create_if_block_3(ctx);
 
 		return {
 			c() {
@@ -1556,13 +1584,13 @@
 				if (if_block) if_block.m(h2, null);
 			},
 			p(ctx, dirty) {
-				if (dirty & /*$user*/ 1 && t1_value !== (t1_value = /*$user*/ ctx[0].name + "")) set_data(t1, t1_value);
+				if (dirty & /*$user*/ 64 && t1_value !== (t1_value = /*$user*/ ctx[6].name + "")) set_data(t1, t1_value);
 
-				if (/*$user*/ ctx[0].pronouns) {
+				if (/*$user*/ ctx[6].pronouns) {
 					if (if_block) {
 						if_block.p(ctx, dirty);
 					} else {
-						if_block = create_if_block_1(ctx);
+						if_block = create_if_block_3(ctx);
 						if_block.c();
 						if_block.m(h2, null);
 					}
@@ -1581,10 +1609,10 @@
 		};
 	}
 
-	// (14:2) {#if $user.pronouns}
-	function create_if_block_1(ctx) {
+	// (106:2) {#if $user.pronouns}
+	function create_if_block_3(ctx) {
 		let t0;
-		let t1_value = /*$user*/ ctx[0].pronouns + "";
+		let t1_value = /*$user*/ ctx[6].pronouns + "";
 		let t1;
 		let t2;
 
@@ -1600,7 +1628,7 @@
 				insert(target, t2, anchor);
 			},
 			p(ctx, dirty) {
-				if (dirty & /*$user*/ 1 && t1_value !== (t1_value = /*$user*/ ctx[0].pronouns + "")) set_data(t1, t1_value);
+				if (dirty & /*$user*/ 64 && t1_value !== (t1_value = /*$user*/ ctx[6].pronouns + "")) set_data(t1, t1_value);
 			},
 			d(detaching) {
 				if (detaching) {
@@ -1612,53 +1640,457 @@
 		};
 	}
 
+	// (151:8) {#if day.month}
+	function create_if_block_1(ctx) {
+		let t_value = /*day*/ ctx[23].month + "";
+		let t;
+
+		return {
+			c() {
+				t = text(t_value);
+			},
+			m(target, anchor) {
+				insert(target, t, anchor);
+			},
+			p(ctx, dirty) {
+				if (dirty & /*weeks*/ 2 && t_value !== (t_value = /*day*/ ctx[23].month + "")) set_data(t, t_value);
+			},
+			d(detaching) {
+				if (detaching) {
+					detach(t);
+				}
+			}
+		};
+	}
+
+	// (147:4) {#each week as day}
+	function create_each_block_1(ctx) {
+		let td;
+		let h4;
+		let button;
+		let t0;
+		let t1_value = /*day*/ ctx[23].day + "";
+		let t1;
+		let mounted;
+		let dispose;
+		let if_block = /*day*/ ctx[23].month && create_if_block_1(ctx);
+
+		function click_handler_2() {
+			return /*click_handler_2*/ ctx[14](/*day*/ ctx[23]);
+		}
+
+		return {
+			c() {
+				td = element("td");
+				h4 = element("h4");
+				button = element("button");
+				if (if_block) if_block.c();
+				t0 = space();
+				t1 = text(t1_value);
+			},
+			m(target, anchor) {
+				insert(target, td, anchor);
+				append(td, h4);
+				append(h4, button);
+				if (if_block) if_block.m(button, null);
+				append(button, t0);
+				append(button, t1);
+
+				if (!mounted) {
+					dispose = listen(button, "click", click_handler_2);
+					mounted = true;
+				}
+			},
+			p(new_ctx, dirty) {
+				ctx = new_ctx;
+
+				if (/*day*/ ctx[23].month) {
+					if (if_block) {
+						if_block.p(ctx, dirty);
+					} else {
+						if_block = create_if_block_1(ctx);
+						if_block.c();
+						if_block.m(button, t0);
+					}
+				} else if (if_block) {
+					if_block.d(1);
+					if_block = null;
+				}
+
+				if (dirty & /*weeks*/ 2 && t1_value !== (t1_value = /*day*/ ctx[23].day + "")) set_data(t1, t1_value);
+			},
+			d(detaching) {
+				if (detaching) {
+					detach(td);
+				}
+
+				if (if_block) if_block.d();
+				mounted = false;
+				dispose();
+			}
+		};
+	}
+
+	// (145:2) {#each weeks as week}
+	function create_each_block(ctx) {
+		let tr;
+		let t;
+		let each_value_1 = ensure_array_like(/*week*/ ctx[20]);
+		let each_blocks = [];
+
+		for (let i = 0; i < each_value_1.length; i += 1) {
+			each_blocks[i] = create_each_block_1(get_each_context_1(ctx, each_value_1, i));
+		}
+
+		return {
+			c() {
+				tr = element("tr");
+
+				for (let i = 0; i < each_blocks.length; i += 1) {
+					each_blocks[i].c();
+				}
+
+				t = space();
+			},
+			m(target, anchor) {
+				insert(target, tr, anchor);
+
+				for (let i = 0; i < each_blocks.length; i += 1) {
+					if (each_blocks[i]) {
+						each_blocks[i].m(tr, null);
+					}
+				}
+
+				append(tr, t);
+			},
+			p(ctx, dirty) {
+				if (dirty & /*select, weeks*/ 130) {
+					each_value_1 = ensure_array_like(/*week*/ ctx[20]);
+					let i;
+
+					for (i = 0; i < each_value_1.length; i += 1) {
+						const child_ctx = get_each_context_1(ctx, each_value_1, i);
+
+						if (each_blocks[i]) {
+							each_blocks[i].p(child_ctx, dirty);
+						} else {
+							each_blocks[i] = create_each_block_1(child_ctx);
+							each_blocks[i].c();
+							each_blocks[i].m(tr, t);
+						}
+					}
+
+					for (; i < each_blocks.length; i += 1) {
+						each_blocks[i].d(1);
+					}
+
+					each_blocks.length = each_value_1.length;
+				}
+			},
+			d(detaching) {
+				if (detaching) {
+					detach(tr);
+				}
+
+				destroy_each(each_blocks, detaching);
+			}
+		};
+	}
+
+	// (171:1) {#if showPopup}
+	function create_if_block$1(ctx) {
+		let div3;
+		let form;
+		let div0;
+		let label0;
+		let t1;
+		let input0;
+		let t2;
+		let div1;
+		let label1;
+		let t4;
+		let input1;
+		let t5;
+		let div2;
+		let label2;
+		let t7;
+		let input2;
+		let t8;
+		let input3;
+		let mounted;
+		let dispose;
+
+		return {
+			c() {
+				div3 = element("div");
+				form = element("form");
+				div0 = element("div");
+				label0 = element("label");
+				label0.textContent = "Name:";
+				t1 = space();
+				input0 = element("input");
+				t2 = space();
+				div1 = element("div");
+				label1 = element("label");
+				label1.textContent = "Latitude:";
+				t4 = space();
+				input1 = element("input");
+				t5 = space();
+				div2 = element("div");
+				label2 = element("label");
+				label2.textContent = "Longitude:";
+				t7 = space();
+				input2 = element("input");
+				t8 = space();
+				input3 = element("input");
+				attr(label0, "for", "name");
+				attr(input0, "type", "text");
+				attr(input0, "id", "name");
+				attr(label1, "for", "lat");
+				attr(input1, "type", "number");
+				attr(input1, "id", "lat");
+				attr(label2, "for", "lon");
+				attr(input2, "type", "number");
+				attr(input2, "id", "lon");
+				attr(input3, "type", "submit");
+				input3.value = "Create";
+				attr(div3, "id", "popup");
+			},
+			m(target, anchor) {
+				insert(target, div3, anchor);
+				append(div3, form);
+				append(form, div0);
+				append(div0, label0);
+				append(div0, t1);
+				append(div0, input0);
+				set_input_value(input0, /*name*/ ctx[3]);
+				append(form, t2);
+				append(form, div1);
+				append(div1, label1);
+				append(div1, t4);
+				append(div1, input1);
+				set_input_value(input1, /*location_lat*/ ctx[4]);
+				append(form, t5);
+				append(form, div2);
+				append(div2, label2);
+				append(div2, t7);
+				append(div2, input2);
+				set_input_value(input2, /*location_lon*/ ctx[5]);
+				append(form, t8);
+				append(form, input3);
+
+				if (!mounted) {
+					dispose = [
+						listen(input0, "input", /*input0_input_handler*/ ctx[16]),
+						listen(input1, "input", /*input1_input_handler*/ ctx[17]),
+						listen(input2, "input", /*input2_input_handler*/ ctx[18]),
+						listen(form, "submit", prevent_default(/*addEvent*/ ctx[8]))
+					];
+
+					mounted = true;
+				}
+			},
+			p(ctx, dirty) {
+				if (dirty & /*name*/ 8 && input0.value !== /*name*/ ctx[3]) {
+					set_input_value(input0, /*name*/ ctx[3]);
+				}
+
+				if (dirty & /*location_lat*/ 16 && to_number(input1.value) !== /*location_lat*/ ctx[4]) {
+					set_input_value(input1, /*location_lat*/ ctx[4]);
+				}
+
+				if (dirty & /*location_lon*/ 32 && to_number(input2.value) !== /*location_lon*/ ctx[5]) {
+					set_input_value(input2, /*location_lon*/ ctx[5]);
+				}
+			},
+			d(detaching) {
+				if (detaching) {
+					detach(div3);
+				}
+
+				mounted = false;
+				run_all(dispose);
+			}
+		};
+	}
+
 	function create_fragment$4(ctx) {
 		let loggedinbar;
 		let t0;
 		let t1;
-		let h3;
+		let h30;
+		let button0;
 		let t3;
+		let t4_value = /*selected*/ ctx[0].toLocaleString("default", { month: "long" }) + "";
+		let t4;
+		let t5;
+		let button1;
+		let t7;
 		let table;
+		let thead;
+		let t21;
+		let tbody;
+		let t22;
+		let div;
+		let h31;
+		let t23_value = /*selected*/ ctx[0].toLocaleDateString("default", { month: "long", day: "numeric" }) + "";
+		let t23;
+		let t24;
+		let button2;
+		let t25;
+		let t26;
 		let current;
+		let mounted;
+		let dispose;
 		loggedinbar = new LoggedInBar({});
-		let if_block = /*$user*/ ctx[0] && create_if_block$1(ctx);
+		let if_block0 = /*$user*/ ctx[6] && create_if_block_2(ctx);
+		let each_value = ensure_array_like(/*weeks*/ ctx[1]);
+		let each_blocks = [];
+
+		for (let i = 0; i < each_value.length; i += 1) {
+			each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+		}
+
+		let if_block1 = /*showPopup*/ ctx[2] && create_if_block$1(ctx);
 
 		return {
 			c() {
 				create_component(loggedinbar.$$.fragment);
 				t0 = space();
-				if (if_block) if_block.c();
+				if (if_block0) if_block0.c();
 				t1 = space();
-				h3 = element("h3");
-				h3.textContent = `${/*selected*/ ctx[1].toLocaleString("default", { month: "long" })}`;
+				h30 = element("h3");
+				button0 = element("button");
+				button0.textContent = "←";
 				t3 = space();
+				t4 = text(t4_value);
+				t5 = space();
+				button1 = element("button");
+				button1.textContent = "→";
+				t7 = space();
 				table = element("table");
-				table.innerHTML = `<thead><th>Sun</th> <th>Mon</th> <th>Tue</th> <th>Wed</th> <th>Thu</th> <th>Fri</th> <th>Sat</th></thead> <body><tr></tr></body>`;
+				thead = element("thead");
+				thead.innerHTML = `<th>Sun</th> <th>Mon</th> <th>Tue</th> <th>Wed</th> <th>Thu</th> <th>Fri</th> <th>Sat</th>`;
+				t21 = space();
+				tbody = element("tbody");
+
+				for (let i = 0; i < each_blocks.length; i += 1) {
+					each_blocks[i].c();
+				}
+
+				t22 = space();
+				div = element("div");
+				h31 = element("h3");
+				t23 = text(t23_value);
+				t24 = space();
+				button2 = element("button");
+				t25 = text("+");
+				t26 = space();
+				if (if_block1) if_block1.c();
 				attr(table, "id", "calendar");
 				attr(table, "class", "svelte-pqyj29");
+				button2.disabled = /*showPopup*/ ctx[2];
 			},
 			m(target, anchor) {
 				mount_component(loggedinbar, target, anchor);
 				insert(target, t0, anchor);
-				if (if_block) if_block.m(target, anchor);
+				if (if_block0) if_block0.m(target, anchor);
 				insert(target, t1, anchor);
-				insert(target, h3, anchor);
-				insert(target, t3, anchor);
+				insert(target, h30, anchor);
+				append(h30, button0);
+				append(h30, t3);
+				append(h30, t4);
+				append(h30, t5);
+				append(h30, button1);
+				insert(target, t7, anchor);
 				insert(target, table, anchor);
+				append(table, thead);
+				append(table, t21);
+				append(table, tbody);
+
+				for (let i = 0; i < each_blocks.length; i += 1) {
+					if (each_blocks[i]) {
+						each_blocks[i].m(tbody, null);
+					}
+				}
+
+				insert(target, t22, anchor);
+				insert(target, div, anchor);
+				append(div, h31);
+				append(h31, t23);
+				append(h31, t24);
+				append(h31, button2);
+				append(button2, t25);
+				append(div, t26);
+				if (if_block1) if_block1.m(div, null);
 				current = true;
+
+				if (!mounted) {
+					dispose = [
+						listen(button0, "click", /*click_handler*/ ctx[12]),
+						listen(button1, "click", /*click_handler_1*/ ctx[13]),
+						listen(button2, "click", /*click_handler_3*/ ctx[15])
+					];
+
+					mounted = true;
+				}
 			},
 			p(ctx, [dirty]) {
-				if (/*$user*/ ctx[0]) {
-					if (if_block) {
-						if_block.p(ctx, dirty);
+				if (/*$user*/ ctx[6]) {
+					if (if_block0) {
+						if_block0.p(ctx, dirty);
 					} else {
-						if_block = create_if_block$1(ctx);
-						if_block.c();
-						if_block.m(t1.parentNode, t1);
+						if_block0 = create_if_block_2(ctx);
+						if_block0.c();
+						if_block0.m(t1.parentNode, t1);
 					}
-				} else if (if_block) {
-					if_block.d(1);
-					if_block = null;
+				} else if (if_block0) {
+					if_block0.d(1);
+					if_block0 = null;
+				}
+
+				if ((!current || dirty & /*selected*/ 1) && t4_value !== (t4_value = /*selected*/ ctx[0].toLocaleString("default", { month: "long" }) + "")) set_data(t4, t4_value);
+
+				if (dirty & /*weeks, select*/ 130) {
+					each_value = ensure_array_like(/*weeks*/ ctx[1]);
+					let i;
+
+					for (i = 0; i < each_value.length; i += 1) {
+						const child_ctx = get_each_context(ctx, each_value, i);
+
+						if (each_blocks[i]) {
+							each_blocks[i].p(child_ctx, dirty);
+						} else {
+							each_blocks[i] = create_each_block(child_ctx);
+							each_blocks[i].c();
+							each_blocks[i].m(tbody, null);
+						}
+					}
+
+					for (; i < each_blocks.length; i += 1) {
+						each_blocks[i].d(1);
+					}
+
+					each_blocks.length = each_value.length;
+				}
+
+				if ((!current || dirty & /*selected*/ 1) && t23_value !== (t23_value = /*selected*/ ctx[0].toLocaleDateString("default", { month: "long", day: "numeric" }) + "")) set_data(t23, t23_value);
+
+				if (!current || dirty & /*showPopup*/ 4) {
+					button2.disabled = /*showPopup*/ ctx[2];
+				}
+
+				if (/*showPopup*/ ctx[2]) {
+					if (if_block1) {
+						if_block1.p(ctx, dirty);
+					} else {
+						if_block1 = create_if_block$1(ctx);
+						if_block1.c();
+						if_block1.m(div, null);
+					}
+				} else if (if_block1) {
+					if_block1.d(1);
+					if_block1 = null;
 				}
 			},
 			i(local) {
@@ -1674,27 +2106,201 @@
 				if (detaching) {
 					detach(t0);
 					detach(t1);
-					detach(h3);
-					detach(t3);
+					detach(h30);
+					detach(t7);
 					detach(table);
+					detach(t22);
+					detach(div);
 				}
 
 				destroy_component(loggedinbar, detaching);
-				if (if_block) if_block.d(detaching);
+				if (if_block0) if_block0.d(detaching);
+				destroy_each(each_blocks, detaching);
+				if (if_block1) if_block1.d();
+				mounted = false;
+				run_all(dispose);
 			}
 		};
 	}
 
-	async function updateCalendar(date) {
-		
-	} // TODO
-
 	function instance$3($$self, $$props, $$invalidate) {
 		let $user;
-		component_subscribe($$self, user, $$value => $$invalidate(0, $user = $$value));
+		component_subscribe($$self, user, $$value => $$invalidate(6, $user = $$value));
 		let selected = new Date();
-		updateCalendar();
-		return [$user, selected];
+		selected.setHours(0);
+		selected.setMinutes(0);
+		selected.setSeconds(0);
+		selected.setMilliseconds(0);
+		selected = selected;
+		let events;
+		let showPopup = false;
+		let weeks = [];
+		let start;
+		let end;
+
+		async function updateCalendar(date) {
+			$$invalidate(1, weeks = []);
+			let week = [];
+			let first = new Date(date);
+			first.setDate(1);
+			let prevs = first.getDay();
+			let buffer;
+
+			while (prevs > 0) {
+				buffer = new Date(first.getTime() - 86400 * 1000 * prevs);
+
+				week.push({
+					month: buffer.toLocaleDateString("default", { month: "short" }),
+					day: buffer.getDate(),
+					events: [],
+					date: buffer
+				});
+
+				prevs--;
+			}
+
+			$$invalidate(10, start = buffer);
+			buffer = new Date(first);
+
+			while (buffer.getMonth() == first.getMonth()) {
+				week.push({
+					day: buffer.getDate(),
+					events: [],
+					date: buffer
+				});
+
+				buffer = new Date(buffer.getTime() + 86400 * 1000);
+
+				if (week.length === 7) {
+					weeks.push(week);
+					week = [];
+				}
+			}
+
+			if (week.length > 0) {
+				while (week.length < 7) {
+					week.push({
+						month: buffer.toLocaleDateString("default", { month: "short" }),
+						day: buffer.getDate(),
+						events: [],
+						date: buffer
+					});
+
+					buffer = new Date(buffer.getTime() + 86400 * 1000);
+				}
+
+				weeks.push(week);
+			}
+
+			$$invalidate(11, end = buffer);
+		}
+
+		fetch(`/api/users/me/events`).then(res => res.json()).then(evt => {
+			$$invalidate(9, events = evt);
+		});
+
+		function select(day) {
+			$$invalidate(0, selected = day.date);
+		}
+
+		let name;
+		let location_lat;
+		let location_lon;
+
+		async function addEvent() {
+			let res = await fetch(`/api/events`, {
+				method: "POST",
+				headers: { "content-type": "application/json" },
+				body: JSON.stringify({ name, location_lat, location_lon })
+			});
+
+			let evt = await res.json();
+			$$invalidate(9, events = [...events, evt]);
+			$$invalidate(2, showPopup = false);
+		}
+
+		const click_handler = () => {
+			selected.setDate(1);
+
+			if (selected.getMonth() === 0) {
+				selected.setFullYear(selected.getFullYear() - 1);
+			}
+
+			selected.setMonth((selected.getMonth() + 11) % 12);
+			$$invalidate(0, selected);
+		};
+
+		const click_handler_1 = () => {
+			selected.setDate(1);
+
+			if (selected.getMonth() === 11) {
+				selected.setFullYear(selected.getFullYear() + 1);
+			}
+
+			selected.setMonth((selected.getMonth() + 1) % 12);
+			$$invalidate(0, selected);
+		};
+
+		const click_handler_2 = day => select(day);
+		const click_handler_3 = () => $$invalidate(2, showPopup = true);
+
+		function input0_input_handler() {
+			name = this.value;
+			$$invalidate(3, name);
+		}
+
+		function input1_input_handler() {
+			location_lat = to_number(this.value);
+			$$invalidate(4, location_lat);
+		}
+
+		function input2_input_handler() {
+			location_lon = to_number(this.value);
+			$$invalidate(5, location_lon);
+		}
+
+		$$self.$$.update = () => {
+			if ($$self.$$.dirty & /*events, start, end, weeks*/ 3586) {
+				for (const evt of events) {
+					if (evt.date <= start.getTime() || evt.date >= end.getTime()) continue;
+					new Date(evt.date);
+
+					for (const week of weeks) {
+						for (const day of week) {
+							if (evt.date >= day.date.getTime() && evt.date < day.date.getTime() + 86400 * 1000) {
+								day.events.push(evt);
+							}
+						}
+					}
+				}
+			}
+
+			if ($$self.$$.dirty & /*selected*/ 1) {
+				updateCalendar(selected);
+			}
+		};
+
+		return [
+			selected,
+			weeks,
+			showPopup,
+			name,
+			location_lat,
+			location_lon,
+			$user,
+			select,
+			addEvent,
+			events,
+			start,
+			end,
+			click_handler,
+			click_handler_1,
+			click_handler_2,
+			click_handler_3,
+			input0_input_handler,
+			input1_input_handler,
+			input2_input_handler
+		];
 	}
 
 	class Dashboard extends SvelteComponent {
