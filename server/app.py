@@ -123,7 +123,7 @@ def update_user():
 
     user.update()
     
-    return json.dumps({"success": True})
+    return get_me()
 
 @app.route("/api/login", methods=['POST'])
 def login():
@@ -187,13 +187,13 @@ def create_event():
         return error("Location (longitude) doesn't exist")
     if data['date'] <= 0:
         return error("Not a valid date")
-    if -90 <= data['location_lat'] <= 90 is False:
+    if not (-90 <= data['location_lat'] <= 90):
         return error("Not a valid latitude")
-    if -180 <= data['location_lon'] <= 180 is False:
+    if not (-180 <= data['location_lon'] <= 180):
         return error("Not a valid longitude")
 
     
-    event = Events(data[0], data[1], data[2], data[3]) # TODO
+    event = Events(data[0], data[1], (data[2], data[3])) # TODO
     event.create()
     
     return json.dumps({"success": True})

@@ -48,7 +48,7 @@ class UsersSlay(object):
 	def update(self):
 		with get_db() as con:
 			con.execute("UPDATE users SET password = ?, name = ?, pronouns = ?, age = ?, year = ?, pfp = ? WHERE username = ?",
-					(self.password, self.name, self.pronouns, self.age, self.year, self.username, self.pfp_id))
+					(self.password, self.name, self.pronouns, self.age, self.year, self.pfp_id, self.username))
 
 	@staticmethod
 	def update_pfp(pfp_id: int, pfp: bytes):
