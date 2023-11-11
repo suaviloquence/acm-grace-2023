@@ -39,7 +39,6 @@ def get_user(username):
     
 @app.route("/api/user", methods=["POST"])
 def create_user():
-
     if not request.is_json:
         # return error invalid request
         return error("Invalid request :pensive:")
@@ -85,6 +84,47 @@ def create_user():
     
     return json.dumps({"success": True})
 
+@app.route("/api/user", methods=["PUT"])
+def update_user():
+    if not request.is_json:
+        # return error invalid request
+        return error("Invalid request :pensive:")
+
+    data = request.json
+
+    if 'username' not in session: return error("not logged in")
+    username = session['username'];
+    
+    user = UsersSlay.get(username)
+    
+    if user is None:
+        return error("User doesnt exists :()")
+
+    if 'name' in data:
+        user.name = data['name']
+    
+    user.pronouns = None
+    if 'pronouns' in data:
+        user.pronouns = data['pronouns']
+
+    user.age = None
+    
+    if 'age' in data:
+        age = data['age']
+        if data['age'] >=100 or data['age'] <= 0:
+            return error("This is not a real age")
+        user.age = age
+    
+    user.year = None
+    if 'year' in data:
+        if data['year'] > 2040 or data['year'] < 2022:
+            return error("This is not a valid graduation year")
+        user.year = data['year']
+
+    user.update()
+    
+    return json.dumps({"success": True})
+
 @app.route("/api/login", methods=['POST'])
 def login():
     if 'username' in session:
@@ -114,16 +154,34 @@ def logout():
         del session['username']
     return json.dumps({"success": True})
     
+@app.route('/api/user/<username>/events')
 def get_users_Events(username):
-    """ get the user from the database """
     userevents = Events.get(username)
+    e = []
     if userevents is not None:
-        e = []
         for i in userevents:
             e.append(i)
-        return json.dumps(e)
-    else:
-        return error("user has no events")
+    return json.dumps(e)
+
+
+@app.route('/api/events', methods=["POST"])
+def create_event():
+    if not request.is_json: return error("invalid req")
+    data = request.json
+    
+    if 'username' not in session:
+        return error("not logged in")
+    
+    owner = session['username']
+    
+    data[]
+    
+    # validate event data into an event object
+    
+    event = ... # TODO
+    event.create()
+    
+    return json.dumps({"success": True})
 
 
 @app.route("/public/<path:path>", methods=['GET'])
