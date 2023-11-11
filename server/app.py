@@ -36,6 +36,19 @@ def get_user(username):
         })
     else:
         return error("user not found")
+
+@app.route("/api/event/<id>")
+def get_event(id):
+    """ get the user from the database """
+    event = Events.get(id)
+    if event is not None:
+        return json.dumps({
+            'eventName': event.EventName,
+            'date': event.date,
+            'location': event.location,
+        })
+    else:
+        return error("event not found")
     
 @app.route("/api/user", methods=["POST"])
 def create_user():
