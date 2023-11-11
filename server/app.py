@@ -123,16 +123,17 @@ def update_user():
     user.age = None
     
     if 'age' in data:
-        age = data['age']
-        if data['age'] >=100 or data['age'] <= 0:
+        age = int(data['age'])
+        if age >=100 or age <= 0:
             return error("This is not a real age")
         user.age = age
     
     user.year = None
     if 'year' in data:
-        if data['year'] > 2040 or data['year'] < 2022:
+        year = int(data['year'])
+        if year > 2040 or year < 2022:
             return error("This is not a valid graduation year")
-        user.year = data['year']
+        user.year = year
 
     user.update()
     
