@@ -70,6 +70,7 @@
 			weeks.push(week);
 		}
 		end = buffer;
+		updateEvts(events);
 	}
 
 	fetch(`/api/user/me/events`)
@@ -78,30 +79,43 @@
 			events = evt;
 		});
 
-	$: console.dir(events);
-	$: if (events) {
-		for (const week of weeks) {
-			for (const day of week) {
-				day.events = [];
-			}
-		}
-		for (const evt of events) {
-			if (evt.start <= start.getTime() || evt.start >= end.getTime())
-				continue;
+	let invPms: Promise<Event[]> = fetch(`/api/user/me/invitations`)
+		.then((res) => res.json())
+		.then((ids: number[]) =>
+			Promise.all(
+				ids.map((id) =>
+					fetch(`/api/event/${id}`).then((res) => res.json())
+				)
+			)
+		);
 
+	$: console.dir(events);
+	function updateEvts(events: Event[]) {
+		if (events) {
 			for (const week of weeks) {
 				for (const day of week) {
-					if (
-						evt.start >= day.date.getTime() &&
-						evt.start < day.date.getTime() + 86400 * 1000
-					) {
-						day.events = [...day.events, evt];
+					day.events = [];
+				}
+			}
+			for (const evt of events) {
+				if (evt.start <= start.getTime() || evt.start >= end.getTime())
+					continue;
+
+				for (const week of weeks) {
+					for (const day of week) {
+						if (
+							evt.start >= day.date.getTime() &&
+							evt.start < day.date.getTime() + 86400 * 1000
+						) {
+							day.events = [...day.events, evt];
+						}
 					}
 				}
 			}
+			weeks = weeks;
 		}
-		weeks = weeks;
 	}
+	$: updateEvts(events);
 
 	function select(day: CalendarDate) {
 		selected = day.date;
@@ -145,17 +159,61 @@
 	}
 
 	$: updateCalendar(selected);
+
+	async function declineInvite(evt: Event) {
+		if (!confirm("Are you sure you want to revoke the invite?")) return;
+		await fetch(`/api/event/${evt.id}/users/${$user.username}`, {
+			method: "DELETE",
+		});
+		invPms = fetch(`/api/user/me/invitations`)
+			.then((res) => res.json())
+			.then((ids: number[]) =>
+				Promise.all(
+					ids.map((id) =>
+						fetch(`/api/event/${id}`).then((res) => res.json())
+					)
+				)
+			);
+	}
+
+	async function acceptInvite(evt: Event) {
+		await fetch(`/api/event/${evt.id}/users`, { method: "PUT" });
+		invPms = fetch(`/api/user/me/invitations`)
+			.then((res) => res.json())
+			.then((ids: number[]) =>
+				Promise.all(
+					ids.map((id) =>
+						fetch(`/api/event/${id}`).then((res) => res.json())
+					)
+				)
+			);
+		events = await (await fetch(`/api/user/me/events`)).json();
+	}
 </script>
 
 <LoggedInBar />
-{#if $user}
-	<h2>
-		Hello, {$user.name}
-		{#if $user.pronouns}
-			({$user.pronouns})
-		{/if}
-	</h2>
-{/if}
+{#await invPms}
+	Loading invitations…
+{:then invs}
+	<h4>Invitations</h4>
+	<ul>
+		{#each invs as evt}
+			<a href="/event/{evt.id}">{evt.eventName}</a> from
+			<a href="/user/{evt.owner}">{evt.owner}</a>
+			{new Date(evt.start).toLocaleDateString("default", {
+				month: "long",
+				day: "numeric",
+				hour: "numeric",
+				minute: "numeric",
+			})}—{new Date(evt.end).toLocaleDateString("default", {
+				hour: "numeric",
+				minute: "numeric",
+			})}
+			<button on:click={() => acceptInvite(evt)}>Accept</button>
+			<button on:click={() => declineInvite(evt)}>Decline</button>
+		{/each}
+	</ul>
+{/await}
 <h3>
 	<button
 		on:click={() => {

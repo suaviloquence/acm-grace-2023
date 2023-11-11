@@ -6,6 +6,7 @@
 	import Dashboard from "./pages/Dashboard.svelte";
 	import Settings from "./pages/Settings.svelte";
 	import Event from "./pages/Event.svelte";
+	import User from "./pages/User.svelte";
 
 	/// e.g., set to /app so /home corresponds to example.com/app/home
 	const PREFIX = "";
@@ -31,6 +32,7 @@
 				edit: !!edit,
 			}),
 		},
+		"/user/(?<username>\\w+)": User,
 	};
 
 	function isOptions<P, MG = P>(

@@ -22,6 +22,9 @@
 	export let id: number;
 	let info_pms = reload();
 	let photo_ids: number[] = [];
+
+	let invitees: string[] = [];
+	let attendees: string[] = [];
 	async function reload() {
 		await fetch(`/api/event/${id}`)
 			.then((res) => res.json())
@@ -44,6 +47,8 @@
 					minute: "numeric",
 				});
 			});
+		attendees = await (await fetch(`/api/event/${id}/users`)).json();
+		invitees = await (await fetch(`/api/event/${id}/invitees`)).json();
 
 		let res = await fetch(`/api/event/${id}/photos`);
 		photo_ids = await res.json();
@@ -55,6 +60,18 @@
 			method: "DELETE",
 		});
 		$path = "/dashboard";
+	}
+
+	async function revokeInvite(invitee: string) {
+		if (!confirm("Are you sure you want to revoke the invite?")) return;
+		await fetch(`/api/event/${id}/users/${invitee}`, { method: "DELETE" });
+		invitees = await (await fetch(`/api/event/${id}/invitees`)).json();
+	}
+
+	async function acceptInvite() {
+		await fetch(`/api/event/${id}/users`, { method: "PUT" });
+		attendees = await (await fetch(`/api/event/${id}/users`)).json();
+		invitees = await (await fetch(`/api/event/${id}/invitees`)).json();
 	}
 
 	async function updateEvent() {
@@ -87,6 +104,7 @@
 		let { success } = await res.json();
 		if (success) alert("success");
 		username = "";
+		invitees = await (await fetch(`/api/event/${id}/invitees`)).json();
 	}
 
 	let images: FileList;
@@ -113,6 +131,12 @@
 		let res = await fetch(`/api/event/${id}/photos`);
 		photo_ids = await res.json();
 	}
+
+	async function leaveEvent() {
+		if (!confirm("Are you sure you want to leave this event?")) return;
+		await fetch(`/api/event/${id}/users/me`, { method: "DELETE" });
+		$path = "/dashboard";
+	}
 </script>
 
 <LoggedInBar />
@@ -122,7 +146,7 @@
 	<h2>{eventName}</h2>
 	<button on:click={() => (edit = true)}>Edit</button>
 	<button on:click={deleteEvent}>Delete</button>
-	<h3>Owned by {owner}</h3>
+	<h3>Owned by <a href="/user/{owner}">{owner}</a></h3>
 	<h4>At ({location_lat.toFixed(6)}, {location_lon.toFixed(6)})</h4>
 	<div>
 		{new Date(start).toLocaleString("default", {
@@ -133,11 +157,38 @@
 			minute: "numeric",
 		})}
 	</div>
+	<h3>Attendees</h3>
+	<ul>
+		{#each attendees as attendee}
+			<li>
+				{attendee}
+				{#if attendee === $user.username}<button on:click={leaveEvent}
+						>Leave</button
+					>{/if}
+			</li>
+		{/each}
+		{#each invitees as invitee}
+			<li>
+				{invitee} (invited)
+				{#if invitee === $user.username}
+					<button on:click={acceptInvite}>Accept</button>
+					<button on:click={() => revokeInvite(invitee)}
+						>Decline</button
+					>
+				{:else}
+					<button on:click={() => revokeInvite(invitee)}
+						>Revoke</button
+					>
+				{/if}
+			</li>
+		{/each}
+	</ul>
 	<div>
 		<label for="invite">Invite user: </label>
 		<input type="text" required id="invite" bind:value={username} />
 		<button on:click={invite}>Send</button>
 	</div>
+	<h3>Photos</h3>
 	<div>
 		{#each photo_ids as pid}
 			<div class="photo">

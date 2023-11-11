@@ -294,10 +294,22 @@ def accept_invite(id):
     username = session['username']
 
     with get_db() as con:
-        con.execute("UPDATE eventCollab SET accepted = TRUE WHERE ")
+        con.execute("UPDATE eventCollab SET accepted = TRUE WHERE events = ? AND name = ?", [id, username])
 
     return json.dumps({"success": True})
 
+
+@app.route("/api/event/<id>/users/me", methods=['DELETE'])
+def leave_event(id):
+    event = Events.get(id)
+    if event is None:
+        return error("This event doesn't exist")
+    if 'username' not in session: return error("not logged in");
+    username = session['username']
+
+    with get_db() as con:
+        con.execute("DELETE FROM eventCollab where events = ? AND name = ?", [id, username])
+    return json.dumps({"success": True})
 
 @app.route("/api/event/<id>/users/<username>", methods=['DELETE'])
 def decline_invite(id, username):
@@ -309,22 +321,37 @@ def decline_invite(id, username):
         con.execute("DELETE FROM eventCollab where events = ? AND name = ?", [id, username])
     return json.dumps({"success": True})
 
-@app.route("/api/event/<id>/users/<username>", methods=['GET'])
-def get_invitees(eventid):
-    event = Events.get(eventid)
-    invitee = []
+
+@app.route("/api/event/<id>/users", methods=['GET'])
+def get_attendees(id):
+    event = Events.get(id)
     if event is None:
         return error("This event doesn't exist")
     with get_db() as con:
         cur = con.cursor()
-        cur.execute("SELECT * FROM eventCollab WHERE events = ? AND accepted = TRUE", [eventid])
-        res = cur.fetchall()
-        for i in res:
-            invitee.append(i)
-    return invitee
+        cur.execute("SELECT name FROM eventCollab WHERE events = ? AND accepted = TRUE", [id])
+        return json.dumps([res[0] for res in cur.fetchall()])
 
 
+@app.route("/api/event/<id>/invitees", methods=['GET'])
+def get_invitees(id):
+    event = Events.get(id)
+    if event is None:
+        return error("This event doesn't exist")
+    with get_db() as con:
+        cur = con.cursor()
+        cur.execute("SELECT name FROM eventCollab WHERE events = ? AND accepted = FALSE", [id])
+        return json.dumps([res[0] for res in cur.fetchall()])
 
+@app.route("/api/user/me/invitations", methods=['GET'])
+def get_invitations():
+    if 'username' not in session: return error("log in silly")
+    username = session['username']
+    
+    with get_db() as con:
+        cur = con.cursor()
+        cur.execute("SELECT events FROM eventCollab WHERE name = ? AND ACCEPTED = FALSE", [username])
+        return json.dumps([res[0] for res in cur.fetchall()])
 
 
 @app.route("/api/user/<username>/pfp", methods=['GET'])
