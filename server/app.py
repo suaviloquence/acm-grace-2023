@@ -272,11 +272,9 @@ def accept_invite(idcode, username):
 
     with get_db() as con:
         con.execute("UPDATE eventCollab SET accepted = TRUE")
-<<<<<<< Updated upstream
-    return json.dumps({"success": True})
-=======
 
->>>>>>> Stashed changes
+    return json.dumps({"success": True})
+
 
 @app.route("/api/event/<id>/users/<username>", methods=['DELETE'])
 def decline_invite(idcode, username):
@@ -287,6 +285,38 @@ def decline_invite(idcode, username):
     with get_db() as con:
         con.execute("DELETE FROM eventCollab where id = ?")
     return json.dumps({"success": True})
+
+
+@app.route("/api/user/<username>/pfp", methods=['GET'])
+def get_pfp(username, pfpid):
+    user = UsersSlay.get(username)
+    if user is None:
+        return error("This user doesn't exist")
+    user.get_pfp(pfpid)
+
+
+@app.route("/api/user/<username>/pfp", methods=['POST'])
+def create_pfp(username, data):
+    user = UsersSlay.get(username)
+    if user is None:
+        return error("This user doesn't exist")
+    user.create_pfp(data)
+
+
+@app.route("/api/user/<username>/pfp", methods=['PUT'])
+def update_pfp(username, pfpid, data):
+    user = UsersSlay.get(username)
+    if user is None:
+        return error("This user doesn't exist")
+    user.update_pfp(pfpid, data)
+
+
+@app.route("/api/user/<username>/pfp", methods =['DELETE'])
+def delete_pfp(username, pfpid):
+    user = UsersSlay.get(username)
+    if user is None:
+        return error("This user doesn't exist")
+    user.delete_pfp(pfpid)
 
 
 @app.route("/api/login", methods=['POST'])
