@@ -140,7 +140,7 @@ def update_user():
 
 
 @app.route("/api/event", methods=["PUT"])
-def update_user():
+def update_event():
     if not request.is_json:
         # return error invalid request
         return error("Invalid request :pensive:")
