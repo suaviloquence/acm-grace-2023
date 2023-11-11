@@ -55,9 +55,61 @@ def get_event(id):
         return error("event not found")
 
 @app.route("/api/user/me/friends", methods =['GET'])
-def get_friends():
+def get_friends(username):
     # ADD AFTER ADDING FRIENDS TO USER.PY
-    pass
+    l = []
+    data = request.json
+    if username not in data:
+        return error("this user doesn't exist")
+
+    friend = UsersSlay.get_friends(username)
+    if friend is not None:
+        for i in friend:
+            l.append(i)
+        return l
+    else:
+        return error("this user doesn't have friends")
+
+
+@app.route("/api/user/me/friends", methods =['PUT'])
+def add_friend(self, username):
+    data = request.json
+    if username not in data:
+        return error("This user doesn't exist")
+    UsersSlay.add_friend(self, username)
+
+
+@app.route("/api/user/me/friends", methods=['DELETE'])
+def delete_friend(username):
+    data = request.json
+    if username not in data:
+        return error("This user doesn't exist")
+    UsersSlay.delete_friend(username)
+
+
+@app.route("/api/events/<id>/photos/<photoid>", methods=['GET'])
+def get_photo(eventid):
+    event = Events.get(eventid)
+    if event is not None:
+        photo = event.get_photo(eventid)
+        if photo is not None:
+            return photo
+    return error("This event doesn't exist")
+
+
+@app.route("/api/events/<id>/photos/", methods =['POST'])
+def add_photo(eventid, data):
+    event = Events.get(eventid)
+    if event is None:
+        return error("This event doesn't exist")
+    event.add_photo(data)
+
+@app.route("/api/events/<id>/photos/", methods =['DELETE'])
+def delete_photo(eventid, photoid):
+    event = Events.get(eventid)
+    if event is None:
+        return error("This event doesn't exist")
+    event.delete_photo(photoid)
 
     
 @app.route("/api/user", methods=["POST"])
@@ -220,7 +272,11 @@ def accept_invite(idcode, username):
 
     with get_db() as con:
         con.execute("UPDATE eventCollab SET accepted = TRUE")
+<<<<<<< Updated upstream
     return json.dumps({"success": True})
+=======
+
+>>>>>>> Stashed changes
 
 @app.route("/api/event/<id>/users/<username>", methods=['DELETE'])
 def decline_invite(idcode, username):
@@ -231,6 +287,7 @@ def decline_invite(idcode, username):
     with get_db() as con:
         con.execute("DELETE FROM eventCollab where id = ?")
     return json.dumps({"success": True})
+
 
 @app.route("/api/login", methods=['POST'])
 def login():
@@ -328,6 +385,8 @@ def serve_public(path):
     return send_from_directory('../public', path)
 
 @app.route('/', defaults={'path': ''})
+
+
 @app.route('/<path:path>')
 def serve_page(path):
     return app.send_static_file("index.html")
