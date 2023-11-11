@@ -92,10 +92,10 @@ def get_photo_ids(id):
         return json.dumps([row[0] for row in cur.fetchall()])
 
 @app.route("/api/event/<id>/photos/<photoid>", methods=['GET'])
-def get_photo(eventid, photoid):
-    event = Events.get(eventid)
+def get_photo(id, photoid):
+    event = Events.get(id)
     if event is not None:
-        photo = Events.get_photo(photoid)
+        photo = event.get_photo(photoid)
         if photo is not None:
             return Response(photo, mimetype="image/png")
     return error("This photo doesn't exist")
@@ -106,18 +106,18 @@ def add_photo(id):
     if not request.is_json:
         return error("invalid req")
     
-    data = base64.decode(request.json['data'])
+    data = base64.b64decode(request.json['data'])
     event = Events.get(id)
     if event is None:
         return error("This event doesn't exist")
     return json.dumps({"id": event.add_photo(data) })
 
-@app.route("/api/event/<id>/photos/", methods =['DELETE'])
-def delete_photo(eventid, photoid):
-    event = Events.get(eventid)
+@app.route("/api/event/<id>/photos/<photoid>", methods =['DELETE'])
+def delete_photo(id, photoid):
+    event = Events.get(id)
     if event is None:
         return error("This event doesn't exist")
-    event.delete_photo(photoid)
+    Events.delete_photo(photoid)
     return json.dumps({"success": True})
 
     
@@ -345,7 +345,7 @@ def create_pfp():
         return error("This user doesn't exist")
     
     if not request.is_json: return error('bad req')
-    data = base64.decode(request.json['data'])
+    data = base64.b64decode(request.json['data'])
     user.pfp_id = user.create_pfp(data)
     user.update()
     return json.dumps({"success": True})
@@ -359,7 +359,7 @@ def update_pfp():
     if user is None:
         return error("This user doesn't exist")
     if not request.is_json: return error('bad req')
-    data = base64.decode(request.json['data'])
+    data = base64.b64decode(request.json['data'])
     user.pfp_id = user.create_pfp(data)
     user.update()
     return json.dumps({"success": True})

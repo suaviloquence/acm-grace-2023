@@ -21,8 +21,9 @@
 
 	export let id: number;
 	let info_pms = reload();
-	function reload() {
-		return fetch(`/api/event/${id}`)
+	let photo_ids: number[] = [];
+	async function reload() {
+		await fetch(`/api/event/${id}`)
 			.then((res) => res.json())
 			.then((json: EventM) => {
 				eventName = json.eventName;
@@ -43,6 +44,9 @@
 					minute: "numeric",
 				});
 			});
+
+		let res = await fetch(`/api/event/${id}/photos`);
+		photo_ids = await res.json();
 	}
 
 	async function deleteEvent() {
@@ -84,6 +88,31 @@
 		if (success) alert("success");
 		username = "";
 	}
+
+	let images: FileList;
+	async function addPhoto() {
+		for (const file of images) {
+			const data = await file.arrayBuffer();
+			await fetch(`/api/event/${id}/photos`, {
+				method: "POST",
+				headers: {
+					"content-type": "application/json",
+				},
+				body: JSON.stringify({
+					data: btoa(String.fromCharCode(...new Uint8Array(data))),
+				}),
+			});
+		}
+		let res = await fetch(`/api/event/${id}/photos`);
+		photo_ids = await res.json();
+	}
+
+	async function deletePhoto(pid: number) {
+		if (!confirm("Are you sure you want to delete?")) return;
+		await fetch(`/api/event/${id}/photos/${pid}`, { method: "DELETE" });
+		let res = await fetch(`/api/event/${id}/photos`);
+		photo_ids = await res.json();
+	}
 </script>
 
 <LoggedInBar />
@@ -108,6 +137,18 @@
 		<label for="invite">Invite user: </label>
 		<input type="text" required id="invite" bind:value={username} />
 		<button on:click={invite}>Send</button>
+	</div>
+	<div>
+		{#each photo_ids as pid}
+			<div class="photo">
+				<img alt="Photo id {pid}" src="/api/event/{id}/photos/{pid}" />
+				<button on:click={() => deletePhoto(pid)}>Delete</button>
+			</div>
+		{/each}
+		<form on:submit|preventDefault={addPhoto}>
+			<input type="file" accept=".png" bind:files={images} />
+			<input type="submit" value="Upload" />
+		</form>
 	</div>
 	{#if edit}
 		<form on:submit|preventDefault={() => updateEvent()}>
@@ -145,3 +186,10 @@
 		</form>
 	{/if}
 {/await}
+
+<style>
+	.photo img {
+		max-width: 600px;
+		max-height: 600px;
+	}
+</style>
