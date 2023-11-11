@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import json
+import base64
 
-from flask import Flask, request, session, send_from_directory
+from flask import Flask, request, session, send_from_directory, Response
 from dataclasses import dataclass
 from db import get_db
 from user import UsersSlay
@@ -83,29 +84,41 @@ def delete_friend(username):
     UsersSlay.delete_friend(username)
 
 
-@app.route("/api/events/<id>/photos/<photoid>", methods=['GET'])
-def get_photo(eventid):
+@app.route("/api/event/<id>/photos", methods=["GET"])
+def get_photo_ids(id):
+    with get_db() as con:
+        cur = con.cursor()
+        cur.execute("SELECT id FROM photos WHERE eventid = ?", id);
+        return json.dumps([row[0] for row in cur.fetchall()])
+
+@app.route("/api/event/<id>/photos/<photoid>", methods=['GET'])
+def get_photo(id, photoid):
     event = Events.get(eventid)
     if event is not None:
-        photo = event.get_photo(eventid)
+        photo = Events.get_photo(photoid)
         if photo is not None:
-            return photo
-    return error("This event doesn't exist")
+            return Response(photo, mimetype="image/png")
+    return error("This photo doesn't exist")
 
 
-@app.route("/api/events/<id>/photos/", methods =['POST'])
-def add_photo(eventid, data):
+@app.route("/api/event/<id>/photos", methods =['POST'])
+def add_photo(id):
+    if not request.is_json:
+        return error("invalid req")
+    
+    data = base64.decode(request.json['data'])
     event = Events.get(eventid)
     if event is None:
         return error("This event doesn't exist")
-    event.add_photo(data)
+    return json.dumps({"id": event.add_photo(data) })
 
-@app.route("/api/events/<id>/photos/", methods =['DELETE'])
+@app.route("/api/event/<id>/photos/", methods =['DELETE'])
 def delete_photo(eventid, photoid):
     event = Events.get(eventid)
     if event is None:
         return error("This event doesn't exist")
     event.delete_photo(photoid)
+    return json.dumps({"success": True})
 
     
 @app.route("/api/user", methods=["POST"])
@@ -298,27 +311,41 @@ def decline_invite(id, username):
 
 
 @app.route("/api/user/<username>/pfp", methods=['GET'])
-def get_pfp(username, pfpid):
+def get_pfp(username):
     user = UsersSlay.get(username)
     if user is None:
         return error("This user doesn't exist")
-    user.get_pfp(pfpid)
+    
+    return Response(UsersSlay.get_pfp(user.pfp_id), mimetype="image/png")
 
 
-@app.route("/api/user/<username>/pfp", methods=['POST'])
-def create_pfp(username, data):
+@app.route("/api/user/me/pfp", methods=['POST'])
+def create_pfp():
+    if 'username' not in session: return error('not logged in')
+    username = session['username']
     user = UsersSlay.get(username)
     if user is None:
         return error("This user doesn't exist")
-    user.create_pfp(data)
+    
+    if not req.is_json: return error('bad req')
+    data = base64.decode(req.json['data'])
+    user.pfp_id = user.create_pfp(data)
+    user.update()
+    return json.dumps({"success": True})
 
 
-@app.route("/api/user/<username>/pfp", methods=['PUT'])
-def update_pfp(username, pfpid, data):
+@app.route("/api/user/me/pfp", methods=['PUT'])
+def update_pfp():
+    if 'username' not in session: return error('not logged in')
+    username = session['username']
     user = UsersSlay.get(username)
     if user is None:
         return error("This user doesn't exist")
-    user.update_pfp(pfpid, data)
+    if not req.is_json: return error('bad req')
+    data = base64.decode(req.json['data'])
+    user.pfp_id = user.create_pfp(data)
+    user.update()
+    return json.dumps({"success": True})
 
 
 @app.route("/api/user/<username>/pfp", methods =['DELETE'])

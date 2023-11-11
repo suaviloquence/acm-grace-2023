@@ -57,7 +57,9 @@ class Events(object):
 
     def add_photo(self, data):
         with get_db() as con:
-            con.execute("INSERT INTO photos (eventid, photo) VALUES (?, ?) RETURNING id", [id, self.photo])
+            cur = con.cursor()
+            cur.execute("INSERT INTO photos (eventid, photo) VALUES (?, ?) RETURNING id", [self.id, data])
+            return cur.fetchone()[0]
 
     def delete_photo(self):
         with get_db() as con:
