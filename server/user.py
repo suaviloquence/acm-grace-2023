@@ -32,6 +32,11 @@ class UsersSlay(object):
 			if res is None: return None
 		return res['data']
 
+	def get_friends(self):
+		with get_db() as con:
+			cur = con.cursor()
+			cur.execute("SELECT * FROM friends WHERE username1 = ?", [self.username])
+
 	def create(self):
 		with get_db() as con:
 			con.execute("INSERT INTO users (username, password, name, pronouns, bio, age, year, pfp) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (self.username, self.password, self.name, self.pronouns, self.bio, self.age, self.year, self.pfp_id))

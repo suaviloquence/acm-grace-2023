@@ -43,6 +43,24 @@ class Events(object):
             events.append(Events.get(id))
         
         return events
+    def get_photo(self):
+        photolist = []
+        with get_db() as con:
+            cur = con.cursor()
+            cur.execute("SELECT photo FROM photos WHERE eventid = ?", [self.id])
+            rows = cur.fetchall()
+            for i in rows:
+                photolist.append(i)
+        return photolist
+
+    def add_photo(self, data):
+        with get_db() as con:
+            con.execute("INSERT INTO photos (eventid, photo) VALUES (?, ?) RETURNING id", [id, self.photo])
+
+    def delete_photo(self):
+        with get_db() as con:
+            con.execute("DELETE FROM photo WHERE id = ?", [id])
+
 
     @staticmethod
     def get(id: int):
