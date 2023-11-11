@@ -9,7 +9,7 @@ CREATE TABLE events (
 
 CREATE TABLE eventCollab (
     events INTEGER NOT NULL REFERENCES events(id) ON DELETE CASCADE,
-    name TEXT NOT NULL REFERENCES users(username) ON DELETE CASCADE
+    name TEXT NOT NULL REFERENCES users(username) ON DELETE CASCADE,
     accepted BOOLEAN NOT NULL DEFAULT FALSE
 
 );

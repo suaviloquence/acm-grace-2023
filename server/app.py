@@ -304,7 +304,7 @@ def create_event():
     event = Events(data[0], data[1], (data[2], data[3])) # TODO
     event.create()
     
-    return json.dumps({"success": True})
+    return json.dumps(event)
 
 @app.route("/public/<path:path>", methods=['GET'])
 def serve_public(path):

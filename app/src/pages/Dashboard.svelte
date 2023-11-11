@@ -78,17 +78,20 @@
 			events = evt;
 		});
 
-	$: for (const evt of events) {
-		if (evt.date <= start.getTime() || evt.date >= end.getTime()) continue;
-		const date = new Date(evt.date);
+	$: if (events) {
+		for (const evt of events) {
+			if (evt.date <= start.getTime() || evt.date >= end.getTime())
+				continue;
+			const date = new Date(evt.date);
 
-		for (const week of weeks) {
-			for (const day of week) {
-				if (
-					evt.date >= day.date.getTime() &&
-					evt.date < day.date.getTime() + 86400 * 1000
-				) {
-					day.events.push(evt);
+			for (const week of weeks) {
+				for (const day of week) {
+					if (
+						evt.date >= day.date.getTime() &&
+						evt.date < day.date.getTime() + 86400 * 1000
+					) {
+						day.events.push(evt);
+					}
 				}
 			}
 		}
@@ -101,6 +104,8 @@
 	let name: string;
 	let location_lat: number;
 	let location_lon: number;
+	let time = "";
+	$: console.dir(time);
 
 	async function addEvent() {
 		let res = await fetch(`/api/events`, {
@@ -108,6 +113,10 @@
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({
 				name,
+				date:
+					selected.getTime() +
+					Number.parseInt(time.split(":")[0]) * 60 * 60 * 1000 +
+					Number.parseInt(time.split(":")[1]) * 60 * 1000,
 				location_lat,
 				location_lon,
 			}),
@@ -195,6 +204,10 @@
 				<div>
 					<label for="name">Name: </label>
 					<input type="text" id="name" bind:value={name} />
+				</div>
+				<div>
+					<label for="time">Time: </label>
+					<input type="time" id="time" bind:value={time} />
 				</div>
 				<div>
 					<label for="lat">Latitude: </label>
