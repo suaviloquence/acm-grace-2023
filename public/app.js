@@ -1122,7 +1122,7 @@
 		};
 	}
 
-	function instance$6($$self, $$props, $$invalidate) {
+	function instance$7($$self, $$props, $$invalidate) {
 		let $path;
 		component_subscribe($$self, path, $$value => $$invalidate(6, $path = $$value));
 		let username;
@@ -1211,7 +1211,7 @@
 	class Signup extends SvelteComponent {
 		constructor(options) {
 			super();
-			init(this, options, instance$6, create_fragment$7, safe_not_equal, {});
+			init(this, options, instance$7, create_fragment$7, safe_not_equal, {});
 		}
 	}
 
@@ -1316,7 +1316,7 @@
 		};
 	}
 
-	function instance$5($$self, $$props, $$invalidate) {
+	function instance$6($$self, $$props, $$invalidate) {
 		let $path;
 		component_subscribe($$self, path, $$value => $$invalidate(2, $path = $$value));
 		let username;
@@ -1372,7 +1372,7 @@
 	class Login extends SvelteComponent {
 		constructor(options) {
 			super();
-			init(this, options, instance$5, create_fragment$6, safe_not_equal, {});
+			init(this, options, instance$6, create_fragment$6, safe_not_equal, {});
 		}
 	}
 
@@ -1508,7 +1508,7 @@
 		};
 	}
 
-	function instance$4($$self, $$props, $$invalidate) {
+	function instance$5($$self, $$props, $$invalidate) {
 		let $path;
 		let $user;
 		component_subscribe($$self, path, $$value => $$invalidate(0, $path = $$value));
@@ -1537,7 +1537,7 @@
 	class LoggedInBar extends SvelteComponent {
 		constructor(options) {
 			super();
-			init(this, options, instance$4, create_fragment$5, safe_not_equal, {});
+			init(this, options, instance$5, create_fragment$5, safe_not_equal, {});
 		}
 	}
 
@@ -1549,17 +1549,23 @@
 
 	function get_each_context(ctx, list, i) {
 		const child_ctx = ctx.slice();
-		child_ctx[24] = list[i];
+		child_ctx[29] = list[i];
 		return child_ctx;
 	}
 
 	function get_each_context_1(ctx, list, i) {
 		const child_ctx = ctx.slice();
-		child_ctx[27] = list[i];
+		child_ctx[32] = list[i];
 		return child_ctx;
 	}
 
-	// (113:0) {#if $user}
+	function get_each_context_2(ctx, list, i) {
+		const child_ctx = ctx.slice();
+		child_ctx[35] = list[i];
+		return child_ctx;
+	}
+
+	// (127:0) {#if $user}
 	function create_if_block_2(ctx) {
 		let h2;
 		let t0;
@@ -1584,7 +1590,7 @@
 				if (if_block) if_block.m(h2, null);
 			},
 			p(ctx, dirty) {
-				if (dirty & /*$user*/ 256 && t1_value !== (t1_value = /*$user*/ ctx[8].name + "")) set_data(t1, t1_value);
+				if (dirty[0] & /*$user*/ 256 && t1_value !== (t1_value = /*$user*/ ctx[8].name + "")) set_data(t1, t1_value);
 
 				if (/*$user*/ ctx[8].pronouns) {
 					if (if_block) {
@@ -1609,7 +1615,7 @@
 		};
 	}
 
-	// (116:2) {#if $user.pronouns}
+	// (130:2) {#if $user.pronouns}
 	function create_if_block_3(ctx) {
 		let t0;
 		let t1_value = /*$user*/ ctx[8].pronouns + "";
@@ -1628,7 +1634,7 @@
 				insert(target, t2, anchor);
 			},
 			p(ctx, dirty) {
-				if (dirty & /*$user*/ 256 && t1_value !== (t1_value = /*$user*/ ctx[8].pronouns + "")) set_data(t1, t1_value);
+				if (dirty[0] & /*$user*/ 256 && t1_value !== (t1_value = /*$user*/ ctx[8].pronouns + "")) set_data(t1, t1_value);
 			},
 			d(detaching) {
 				if (detaching) {
@@ -1640,9 +1646,9 @@
 		};
 	}
 
-	// (161:8) {#if day.month}
+	// (175:8) {#if day.month}
 	function create_if_block_1(ctx) {
-		let t_value = /*day*/ ctx[27].month + "";
+		let t_value = /*day*/ ctx[32].month + "";
 		let t;
 
 		return {
@@ -1653,7 +1659,7 @@
 				insert(target, t, anchor);
 			},
 			p(ctx, dirty) {
-				if (dirty & /*weeks*/ 2 && t_value !== (t_value = /*day*/ ctx[27].month + "")) set_data(t, t_value);
+				if (dirty[0] & /*weeks*/ 2 && t_value !== (t_value = /*day*/ ctx[32].month + "")) set_data(t, t_value);
 			},
 			d(detaching) {
 				if (detaching) {
@@ -1663,20 +1669,137 @@
 		};
 	}
 
-	// (157:4) {#each week as day}
+	// (180:7) {#each day.events as evt}
+	function create_each_block_2(ctx) {
+		let li;
+		let h5;
+		let t0_value = /*evt*/ ctx[35].eventName + "";
+		let t0;
+		let t1;
+		let t2_value = /*evt*/ ctx[35].owner + "";
+		let t2;
+		let t3;
+		let t4;
+		let button0;
+		let t6;
+		let button1;
+		let t8;
+		let button2;
+		let t10;
+		let div;
+		let t11_value = new Date(/*evt*/ ctx[35].start).toLocaleString("default", { hour: "numeric", minute: "numeric" }) + "";
+		let t11;
+		let t12;
+		let t13_value = new Date(/*evt*/ ctx[35].end).toLocaleString("default", { hour: "numeric", minute: "numeric" }) + "";
+		let t13;
+		let mounted;
+		let dispose;
+
+		function click_handler_3() {
+			return /*click_handler_3*/ ctx[19](/*evt*/ ctx[35]);
+		}
+
+		function click_handler_4() {
+			return /*click_handler_4*/ ctx[20](/*evt*/ ctx[35]);
+		}
+
+		function click_handler_5() {
+			return /*click_handler_5*/ ctx[21](/*evt*/ ctx[35]);
+		}
+
+		return {
+			c() {
+				li = element("li");
+				h5 = element("h5");
+				t0 = text(t0_value);
+				t1 = text(" (");
+				t2 = text(t2_value);
+				t3 = text(")");
+				t4 = space();
+				button0 = element("button");
+				button0.textContent = "View";
+				t6 = space();
+				button1 = element("button");
+				button1.textContent = "Edit";
+				t8 = space();
+				button2 = element("button");
+				button2.textContent = "Delete";
+				t10 = space();
+				div = element("div");
+				t11 = text(t11_value);
+				t12 = text("—");
+				t13 = text(t13_value);
+			},
+			m(target, anchor) {
+				insert(target, li, anchor);
+				append(li, h5);
+				append(h5, t0);
+				append(h5, t1);
+				append(h5, t2);
+				append(h5, t3);
+				append(li, t4);
+				append(li, button0);
+				append(li, t6);
+				append(li, button1);
+				append(li, t8);
+				append(li, button2);
+				append(li, t10);
+				append(li, div);
+				append(div, t11);
+				append(div, t12);
+				append(div, t13);
+
+				if (!mounted) {
+					dispose = [
+						listen(button0, "click", click_handler_3),
+						listen(button1, "click", click_handler_4),
+						listen(button2, "click", click_handler_5)
+					];
+
+					mounted = true;
+				}
+			},
+			p(new_ctx, dirty) {
+				ctx = new_ctx;
+				if (dirty[0] & /*weeks*/ 2 && t0_value !== (t0_value = /*evt*/ ctx[35].eventName + "")) set_data(t0, t0_value);
+				if (dirty[0] & /*weeks*/ 2 && t2_value !== (t2_value = /*evt*/ ctx[35].owner + "")) set_data(t2, t2_value);
+				if (dirty[0] & /*weeks*/ 2 && t11_value !== (t11_value = new Date(/*evt*/ ctx[35].start).toLocaleString("default", { hour: "numeric", minute: "numeric" }) + "")) set_data(t11, t11_value);
+				if (dirty[0] & /*weeks*/ 2 && t13_value !== (t13_value = new Date(/*evt*/ ctx[35].end).toLocaleString("default", { hour: "numeric", minute: "numeric" }) + "")) set_data(t13, t13_value);
+			},
+			d(detaching) {
+				if (detaching) {
+					detach(li);
+				}
+
+				mounted = false;
+				run_all(dispose);
+			}
+		};
+	}
+
+	// (171:4) {#each week as day}
 	function create_each_block_1(ctx) {
 		let td;
 		let h4;
 		let button;
 		let t0;
-		let t1_value = /*day*/ ctx[27].day + "";
+		let t1_value = /*day*/ ctx[32].day + "";
 		let t1;
+		let t2;
+		let ul;
 		let mounted;
 		let dispose;
-		let if_block = /*day*/ ctx[27].month && create_if_block_1(ctx);
+		let if_block = /*day*/ ctx[32].month && create_if_block_1(ctx);
 
 		function click_handler_2() {
-			return /*click_handler_2*/ ctx[16](/*day*/ ctx[27]);
+			return /*click_handler_2*/ ctx[18](/*day*/ ctx[32]);
+		}
+
+		let each_value_2 = ensure_array_like(/*day*/ ctx[32].events);
+		let each_blocks = [];
+
+		for (let i = 0; i < each_value_2.length; i += 1) {
+			each_blocks[i] = create_each_block_2(get_each_context_2(ctx, each_value_2, i));
 		}
 
 		return {
@@ -1687,6 +1810,12 @@
 				if (if_block) if_block.c();
 				t0 = space();
 				t1 = text(t1_value);
+				t2 = space();
+				ul = element("ul");
+
+				for (let i = 0; i < each_blocks.length; i += 1) {
+					each_blocks[i].c();
+				}
 			},
 			m(target, anchor) {
 				insert(target, td, anchor);
@@ -1695,6 +1824,14 @@
 				if (if_block) if_block.m(button, null);
 				append(button, t0);
 				append(button, t1);
+				append(td, t2);
+				append(td, ul);
+
+				for (let i = 0; i < each_blocks.length; i += 1) {
+					if (each_blocks[i]) {
+						each_blocks[i].m(ul, null);
+					}
+				}
 
 				if (!mounted) {
 					dispose = listen(button, "click", click_handler_2);
@@ -1704,7 +1841,7 @@
 			p(new_ctx, dirty) {
 				ctx = new_ctx;
 
-				if (/*day*/ ctx[27].month) {
+				if (/*day*/ ctx[32].month) {
 					if (if_block) {
 						if_block.p(ctx, dirty);
 					} else {
@@ -1717,7 +1854,30 @@
 					if_block = null;
 				}
 
-				if (dirty & /*weeks*/ 2 && t1_value !== (t1_value = /*day*/ ctx[27].day + "")) set_data(t1, t1_value);
+				if (dirty[0] & /*weeks*/ 2 && t1_value !== (t1_value = /*day*/ ctx[32].day + "")) set_data(t1, t1_value);
+
+				if (dirty[0] & /*weeks, deleteEvent, $path*/ 4610) {
+					each_value_2 = ensure_array_like(/*day*/ ctx[32].events);
+					let i;
+
+					for (i = 0; i < each_value_2.length; i += 1) {
+						const child_ctx = get_each_context_2(ctx, each_value_2, i);
+
+						if (each_blocks[i]) {
+							each_blocks[i].p(child_ctx, dirty);
+						} else {
+							each_blocks[i] = create_each_block_2(child_ctx);
+							each_blocks[i].c();
+							each_blocks[i].m(ul, null);
+						}
+					}
+
+					for (; i < each_blocks.length; i += 1) {
+						each_blocks[i].d(1);
+					}
+
+					each_blocks.length = each_value_2.length;
+				}
 			},
 			d(detaching) {
 				if (detaching) {
@@ -1725,17 +1885,18 @@
 				}
 
 				if (if_block) if_block.d();
+				destroy_each(each_blocks, detaching);
 				mounted = false;
 				dispose();
 			}
 		};
 	}
 
-	// (155:2) {#each weeks as week}
+	// (169:2) {#each weeks as week}
 	function create_each_block(ctx) {
 		let tr;
 		let t;
-		let each_value_1 = ensure_array_like(/*week*/ ctx[24]);
+		let each_value_1 = ensure_array_like(/*week*/ ctx[29]);
 		let each_blocks = [];
 
 		for (let i = 0; i < each_value_1.length; i += 1) {
@@ -1764,8 +1925,8 @@
 				append(tr, t);
 			},
 			p(ctx, dirty) {
-				if (dirty & /*select, weeks*/ 514) {
-					each_value_1 = ensure_array_like(/*week*/ ctx[24]);
+				if (dirty[0] & /*weeks, deleteEvent, $path, select*/ 5634) {
+					each_value_1 = ensure_array_like(/*week*/ ctx[29]);
 					let i;
 
 					for (i = 0; i < each_value_1.length; i += 1) {
@@ -1797,7 +1958,7 @@
 		};
 	}
 
-	// (181:1) {#if showPopup}
+	// (230:1) {#if showPopup}
 	function create_if_block$1(ctx) {
 		let div5;
 		let form;
@@ -1921,35 +2082,35 @@
 
 				if (!mounted) {
 					dispose = [
-						listen(input0, "input", /*input0_input_handler*/ ctx[18]),
-						listen(input1, "input", /*input1_input_handler*/ ctx[19]),
-						listen(input2, "input", /*input2_input_handler*/ ctx[20]),
-						listen(input3, "input", /*input3_input_handler*/ ctx[21]),
-						listen(input4, "input", /*input4_input_handler*/ ctx[22]),
-						listen(form, "submit", prevent_default(/*addEvent*/ ctx[10]))
+						listen(input0, "input", /*input0_input_handler*/ ctx[23]),
+						listen(input1, "input", /*input1_input_handler*/ ctx[24]),
+						listen(input2, "input", /*input2_input_handler*/ ctx[25]),
+						listen(input3, "input", /*input3_input_handler*/ ctx[26]),
+						listen(input4, "input", /*input4_input_handler*/ ctx[27]),
+						listen(form, "submit", prevent_default(/*addEvent*/ ctx[11]))
 					];
 
 					mounted = true;
 				}
 			},
 			p(ctx, dirty) {
-				if (dirty & /*name*/ 8 && input0.value !== /*name*/ ctx[3]) {
+				if (dirty[0] & /*name*/ 8 && input0.value !== /*name*/ ctx[3]) {
 					set_input_value(input0, /*name*/ ctx[3]);
 				}
 
-				if (dirty & /*start_time*/ 64) {
+				if (dirty[0] & /*start_time*/ 64) {
 					set_input_value(input1, /*start_time*/ ctx[6]);
 				}
 
-				if (dirty & /*end_time*/ 128) {
+				if (dirty[0] & /*end_time*/ 128) {
 					set_input_value(input2, /*end_time*/ ctx[7]);
 				}
 
-				if (dirty & /*location_lat*/ 16 && to_number(input3.value) !== /*location_lat*/ ctx[4]) {
+				if (dirty[0] & /*location_lat*/ 16 && to_number(input3.value) !== /*location_lat*/ ctx[4]) {
 					set_input_value(input3, /*location_lat*/ ctx[4]);
 				}
 
-				if (dirty & /*location_lon*/ 32 && to_number(input4.value) !== /*location_lon*/ ctx[5]) {
+				if (dirty[0] & /*location_lon*/ 32 && to_number(input4.value) !== /*location_lon*/ ctx[5]) {
 					set_input_value(input4, /*location_lon*/ ctx[5]);
 				}
 			},
@@ -2077,15 +2238,15 @@
 
 				if (!mounted) {
 					dispose = [
-						listen(button0, "click", /*click_handler*/ ctx[14]),
-						listen(button1, "click", /*click_handler_1*/ ctx[15]),
-						listen(button2, "click", /*click_handler_3*/ ctx[17])
+						listen(button0, "click", /*click_handler*/ ctx[16]),
+						listen(button1, "click", /*click_handler_1*/ ctx[17]),
+						listen(button2, "click", /*click_handler_6*/ ctx[22])
 					];
 
 					mounted = true;
 				}
 			},
-			p(ctx, [dirty]) {
+			p(ctx, dirty) {
 				if (/*$user*/ ctx[8]) {
 					if (if_block0) {
 						if_block0.p(ctx, dirty);
@@ -2099,9 +2260,9 @@
 					if_block0 = null;
 				}
 
-				if ((!current || dirty & /*selected*/ 1) && t4_value !== (t4_value = /*selected*/ ctx[0].toLocaleString("default", { month: "long" }) + "")) set_data(t4, t4_value);
+				if ((!current || dirty[0] & /*selected*/ 1) && t4_value !== (t4_value = /*selected*/ ctx[0].toLocaleString("default", { month: "long" }) + "")) set_data(t4, t4_value);
 
-				if (dirty & /*weeks, select*/ 514) {
+				if (dirty[0] & /*weeks, deleteEvent, $path, select*/ 5634) {
 					each_value = ensure_array_like(/*weeks*/ ctx[1]);
 					let i;
 
@@ -2124,9 +2285,9 @@
 					each_blocks.length = each_value.length;
 				}
 
-				if ((!current || dirty & /*selected*/ 1) && t23_value !== (t23_value = /*selected*/ ctx[0].toLocaleDateString("default", { month: "long", day: "numeric" }) + "")) set_data(t23, t23_value);
+				if ((!current || dirty[0] & /*selected*/ 1) && t23_value !== (t23_value = /*selected*/ ctx[0].toLocaleDateString("default", { month: "long", day: "numeric" }) + "")) set_data(t23, t23_value);
 
-				if (!current || dirty & /*showPopup*/ 4) {
+				if (!current || dirty[0] & /*showPopup*/ 4) {
 					button2.disabled = /*showPopup*/ ctx[2];
 				}
 
@@ -2173,9 +2334,11 @@
 		};
 	}
 
-	function instance$3($$self, $$props, $$invalidate) {
+	function instance$4($$self, $$props, $$invalidate) {
 		let $user;
+		let $path;
 		component_subscribe($$self, user, $$value => $$invalidate(8, $user = $$value));
+		component_subscribe($$self, path, $$value => $$invalidate(9, $path = $$value));
 		let selected = new Date();
 		selected.setHours(0);
 		selected.setMinutes(0);
@@ -2209,7 +2372,7 @@
 				prevs--;
 			}
 
-			$$invalidate(12, start = buffer);
+			$$invalidate(14, start = buffer);
 			buffer = new Date(first);
 
 			while (buffer.getMonth() == first.getMonth()) {
@@ -2242,11 +2405,11 @@
 				weeks.push(week);
 			}
 
-			$$invalidate(13, end = buffer);
+			$$invalidate(15, end = buffer);
 		}
 
-		fetch(`/api/users/me/events`).then(res => res.json()).then(evt => {
-			$$invalidate(11, events = evt);
+		fetch(`/api/user/me/events`).then(res => res.json()).then(evt => {
+			$$invalidate(13, events = evt);
 		});
 
 		function select(day) {
@@ -2260,7 +2423,7 @@
 		let end_time = "";
 
 		async function addEvent() {
-			let res = await fetch(`/api/user/me/events`, {
+			let res = await fetch(`/api/event`, {
 				method: "POST",
 				headers: { "content-type": "application/json" },
 				body: JSON.stringify({
@@ -2273,8 +2436,14 @@
 			});
 
 			let evt = await res.json();
-			$$invalidate(11, events = [...events, evt]);
+			$$invalidate(13, events = [...events, evt]);
 			$$invalidate(2, showPopup = false);
+		}
+
+		async function deleteEvent(evt) {
+			if (!confirm("Are you sure you want to delete this event?")) return;
+			await fetch(`/api/event/${evt.id}`, { method: "DELETE" });
+			$$invalidate(13, events = events.filter(e => e != evt));
 		}
 
 		const click_handler = () => {
@@ -2300,7 +2469,10 @@
 		};
 
 		const click_handler_2 = day => select(day);
-		const click_handler_3 = () => $$invalidate(2, showPopup = true);
+		const click_handler_3 = evt => set_store_value(path, $path = `/event/${evt.id}`, $path);
+		const click_handler_4 = evt => set_store_value(path, $path = `/event/${evt.id}/edit`, $path);
+		const click_handler_5 = evt => deleteEvent(evt);
+		const click_handler_6 = () => $$invalidate(2, showPopup = true);
 
 		function input0_input_handler() {
 			name = this.value;
@@ -2328,24 +2500,35 @@
 		}
 
 		$$self.$$.update = () => {
-			if ($$self.$$.dirty & /*events, start, end, weeks*/ 14338) {
+			if ($$self.$$.dirty[0] & /*events*/ 8192) {
+				console.dir(events);
+			}
+
+			if ($$self.$$.dirty[0] & /*events, weeks, start, end*/ 57346) {
 				if (events) {
+					for (const week of weeks) {
+						for (const day of week) {
+							day.events = [];
+						}
+					}
+
 					for (const evt of events) {
-						if (evt.date <= start.getTime() || evt.date >= end.getTime()) continue;
-						new Date(evt.date);
+						if (evt.start <= start.getTime() || evt.start >= end.getTime()) continue;
 
 						for (const week of weeks) {
 							for (const day of week) {
-								if (evt.date >= day.date.getTime() && evt.date < day.date.getTime() + 86400 * 1000) {
-									day.events.push(evt);
+								if (evt.start >= day.date.getTime() && evt.start < day.date.getTime() + 86400 * 1000) {
+									day.events = [...day.events, evt];
 								}
 							}
 						}
 					}
+
+					((($$invalidate(1, weeks), $$invalidate(13, events)), $$invalidate(14, start)), $$invalidate(15, end));
 				}
 			}
 
-			if ($$self.$$.dirty & /*selected*/ 1) {
+			if ($$self.$$.dirty[0] & /*selected*/ 1) {
 				updateCalendar(selected);
 			}
 		};
@@ -2360,8 +2543,10 @@
 			start_time,
 			end_time,
 			$user,
+			$path,
 			select,
 			addEvent,
+			deleteEvent,
 			events,
 			start,
 			end,
@@ -2369,6 +2554,9 @@
 			click_handler_1,
 			click_handler_2,
 			click_handler_3,
+			click_handler_4,
+			click_handler_5,
+			click_handler_6,
 			input0_input_handler,
 			input1_input_handler,
 			input2_input_handler,
@@ -2380,7 +2568,7 @@
 	class Dashboard extends SvelteComponent {
 		constructor(options) {
 			super();
-			init(this, options, instance$3, create_fragment$4, safe_not_equal, {}, add_css);
+			init(this, options, instance$4, create_fragment$4, safe_not_equal, {}, add_css, [-1, -1]);
 		}
 	}
 
@@ -2581,7 +2769,7 @@
 		};
 	}
 
-	function instance$2($$self, $$props, $$invalidate) {
+	function instance$3($$self, $$props, $$invalidate) {
 		let $user;
 		component_subscribe($$self, user, $$value => $$invalidate(0, $user = $$value));
 		let name;
@@ -2651,7 +2839,26 @@
 	class Settings extends SvelteComponent {
 		constructor(options) {
 			super();
-			init(this, options, instance$2, create_fragment$3, safe_not_equal, {});
+			init(this, options, instance$3, create_fragment$3, safe_not_equal, {});
+		}
+	}
+
+	/* src/pages/Event.svelte generated by Svelte v4.2.0 */
+
+	function instance$2($$self, $$props, $$invalidate) {
+		let { id } = $$props;
+
+		$$self.$$set = $$props => {
+			if ('id' in $$props) $$invalidate(0, id = $$props.id);
+		};
+
+		return [id];
+	}
+
+	class Event extends SvelteComponent {
+		constructor(options) {
+			super();
+			init(this, options, instance$2, null, safe_not_equal, { id: 0 });
 		}
 	}
 
@@ -2751,7 +2958,12 @@
 			"/signup": Signup,
 			"/login": Login,
 			"/dashboard": Dashboard,
-			"/settings": Settings
+			"/settings": Settings,
+			"/event/(<id>\\d+)": {
+				component: Event,
+				transform: ({ id }) => {
+				}
+			}
 		};
 
 		const compiled = Object.entries(routes).map(([route, component]) => [

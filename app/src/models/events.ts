@@ -1,8 +1,9 @@
 export interface Event {
 	id: number;
-	name: string;
+	eventName: string;
 	owner: string;
-	date: number;
+	start: number;
+	end: number;
 	location_lat: number;
 	location_lon: number;
 }
